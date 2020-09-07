@@ -7,18 +7,18 @@ public class Lexico {
     private int i = 0;
     private char caracter;
     private String palavra;
+    private int linha = 1;
 
     Token token = new Token();
     ArrayList<String> tokens = new ArrayList<>();
 
     public ArrayList<String> getTokens() { return tokens; }
 
-    public void separaConteudo(String conteudo){
+    public void separaConteudo(String conteudo) throws Exception {
         palavra = conteudo;
-
         caracter = palavra.charAt(i);
 
-        while (caracter != '\0'){
+        while (caracter != '\u0000'){
             while ((caracter == '{') || (caracter == ' ') || (caracter == '\n') && (i < palavra.length())) {
                 if(caracter == '{'){
                     while ((caracter != '}') && (i < palavra.length())) {
@@ -35,22 +35,31 @@ public class Lexico {
                     i++;
                     caracter = palavra.charAt(i);
                 } else {
-                    if((caracter == ' ') || (caracter == '\n')){
+                    if(caracter == ' '){
                         i++;
                         caracter = palavra.charAt(i);
+                    } else {
+                        if(caracter == '\n'){
+                            linha++;
+                            i++;
+                            caracter = palavra.charAt(i);
+                        }
                     }
                 }
             }
-            if(caracter != '\n') {
+            if((caracter != '\n') && (caracter != '\u0000')) {
                 geraToken();
             } else {
-                i++;
+                if(caracter != palavra.length()){
+                    i++;
+                } else {
+                    break;
+                }
             }
         }
-
     }
 
-    private void geraToken() {
+    private void geraToken() throws Exception {
         if (Character.isDigit(caracter)) {
             trataDigito();
         } else {
@@ -58,7 +67,7 @@ public class Lexico {
                 trataIdentificarPalavraReservada();
             } else {
                 if (caracter == ':') {
-                    //                    trataAtribuicao(palavraArquivo);
+                    trataAtribuicao();
                 } else {
                     if ((caracter == '+') || (caracter == '-') || (caracter == '*')) {
                         trataOperadorAritmetico();
@@ -69,7 +78,7 @@ public class Lexico {
                             if ((caracter == ';') || (caracter == ',') || (caracter == '(') || (caracter == ')') || (caracter == '.')) {
                                 trataPontuacao();
                             } else {
-                                //  erro()
+                                throw new Exception("Erro linha " + linha);
                             }
                         }
                     }
@@ -103,14 +112,18 @@ public class Lexico {
 
         token.setLexema(num);
         token.setSimbolo("snum");
-        String concat = token.getLexema() + " " + token.getSimbolo();
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
         tokens.add(concat);
     }
 
-    private void trataIdentificarPalavraReservada() {
+    private void trataIdentificarPalavraReservada() throws Exception {
         String id = "";
 
         id = id + caracter;
+
+        if(id.equals("_")){
+            throw new Exception("Erro linha " + linha);
+        }
 
         if(i != palavra.length()){
             i++;
@@ -196,7 +209,7 @@ public class Lexico {
 
         token.setLexema(id);
 
-        String concat = token.getLexema() + " " + token.getSimbolo();
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
         tokens.add(concat);
     }
 
@@ -214,13 +227,10 @@ public class Lexico {
                 token.setLexema("**");
                 token.setSimbolo("smult");
                 break;
-            default:
-                System.out.println("Nao achou operador aritmetico ");
-                break;
         }
         i++;
         caracter = palavra.charAt(i);
-        String concat = token.getLexema() + " " + token.getSimbolo();
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
         tokens.add(concat);
     }
 
@@ -274,13 +284,10 @@ public class Lexico {
                 token.setSimbolo("smenor");
                 token.setLexema("<");
                 break;
-            default:
-                System.out.println("Nao esta mapeado no operador relacional");
-                break;
         }
         i++;
         caracter = palavra.charAt(i);
-        String concat = token.getLexema() + " " + token.getSimbolo();
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
         tokens.add(concat);
     }
 
@@ -306,13 +313,31 @@ public class Lexico {
                 token.setSimbolo("sponto");
                 token.setLexema(".");
                 break;
-            default:
-                break;
         }
         i++;
         caracter = palavra.charAt(i);
 
-        String concat = token.getLexema() + " " + token.getSimbolo();
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
         tokens.add(concat);
+    }
+
+    private void trataAtribuicao() {
+        if(i != palavra.length()){
+            i++;
+            caracter = palavra.charAt(i);
+            if(caracter == '='){
+                token.setLexema(":=");
+                token.setSimbolo("satribuicao");
+            } else {
+                token.setLexema(":");
+                token.setSimbolo("sdoispontos");
+            }
+
+            i++;
+            caracter = palavra.charAt(i);
+
+            String cocat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+            tokens.add(cocat);
+        }
     }
 }

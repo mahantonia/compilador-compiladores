@@ -1,11 +1,11 @@
-import Teste.Teste;
+import Compilador.Compilador;
 
 public class Main {
     public static void main (String[] args) throws Exception {
         System.out.println("Compilador");
 
-        Teste teste = new Teste();
+        Compilador compilador = new Compilador();
 
-        teste.start();
+        compilador.start();
     }
 }

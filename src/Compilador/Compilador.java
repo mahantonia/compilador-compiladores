@@ -1,10 +1,9 @@
-package Teste;
+package Compilador;
 
 import Arquivo.Arquivo;
 import Lexico.Lexico;
-import Token.Token;
 
-public class Teste {
+public class Compilador {
 
     Arquivo arquivo = new Arquivo();
     Lexico lexico = new Lexico();
@@ -21,7 +20,11 @@ public class Teste {
     }
 
     public void separaToken(){
-        lexico.separaConteudo(arquivo.getLinha());
+        try {
+            lexico.separaConteudo(arquivo.getLinha());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public void print() {
