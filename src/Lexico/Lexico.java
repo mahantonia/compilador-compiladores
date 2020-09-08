@@ -19,30 +19,54 @@ public class Lexico {
         caracter = palavra.charAt(i);
 
         while (caracter != '\u0000'){
-            while ((caracter == '{') || (caracter == ' ') || (caracter == '\n') && (i < palavra.length())) {
+            while ((caracter == '{') || (caracter == ' ') || (caracter == '\n') || (caracter == '/') && (i < palavra.length())) {
                 if(caracter == '{'){
                     while ((caracter != '}') && (i < palavra.length())) {
                         if(caracter == '\n'){
+                            linha++;
                             i++;
                         }
                         i++;
                         caracter = palavra.charAt(i);
                     }
-                    if(caracter == '}'){
+                    if(caracter == '}') {
                         i++;
                         caracter = palavra.charAt(i);
                     }
                     i++;
                     caracter = palavra.charAt(i);
                 } else {
-                    if(caracter == ' '){
+                    if(caracter == '/'){
                         i++;
                         caracter = palavra.charAt(i);
-                    } else {
-                        if(caracter == '\n'){
-                            linha++;
+                        if(caracter != '*'){
+                            error();
+                        } else {
+                            while (caracter != '*' ){
+                                if(caracter == '\n'){
+                                    linha++;
+                                    i++;
+                                }
+                                i++;
+                                caracter = palavra.charAt(i);
+                            }
+                            if(caracter != '/'){
+                                error();
+                            } else {
+                                i++;
+                                caracter = palavra.charAt(i);
+                            }
+                        }
+                    }else{
+                        if(caracter == ' '){
                             i++;
                             caracter = palavra.charAt(i);
+                        } else {
+                            if(caracter == '\n'){
+                                linha++;
+                                i++;
+                                caracter = palavra.charAt(i);
+                            }
                         }
                     }
                 }
@@ -78,7 +102,7 @@ public class Lexico {
                             if ((caracter == ';') || (caracter == ',') || (caracter == '(') || (caracter == ')') || (caracter == '.')) {
                                 trataPontuacao();
                             } else {
-                                throw new Exception("Erro linha " + linha);
+                                error();
                             }
                         }
                     }
@@ -234,7 +258,7 @@ public class Lexico {
         tokens.add(concat);
     }
 
-    private void trataOperadorRelacional() {
+    private void trataOperadorRelacional() throws Exception {
         String op = "";
 
         op = op + caracter;
@@ -255,7 +279,7 @@ public class Lexico {
         }
     }
 
-    private void verificaOperadorRelacional(String operador){
+    private void verificaOperadorRelacional(String operador) throws Exception {
         switch(operador){
             case "=":
                 token.setSimbolo("sig");
@@ -284,6 +308,9 @@ public class Lexico {
                 token.setSimbolo("smenor");
                 token.setLexema("<");
                 break;
+            default:
+                error();
+                break;
         }
         i++;
         caracter = palavra.charAt(i);
@@ -291,7 +318,7 @@ public class Lexico {
         tokens.add(concat);
     }
 
-    private void trataPontuacao(){
+    private void trataPontuacao() throws Exception {
         switch (caracter){
             case ';':
                 token.setSimbolo("sponto_virgula");
@@ -313,6 +340,9 @@ public class Lexico {
                 token.setSimbolo("sponto");
                 token.setLexema(".");
                 break;
+            default:
+               error();
+               break;
         }
         i++;
         caracter = palavra.charAt(i);
@@ -339,5 +369,9 @@ public class Lexico {
             String cocat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
             tokens.add(cocat);
         }
+    }
+
+    private void error() throws Exception {
+        throw new Exception("Erro linha " + linha);
     }
 }
