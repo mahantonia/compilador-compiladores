@@ -29,10 +29,7 @@ public class Lexico {
                         i++;
                         caracter = palavra.charAt(i);
                     }
-                    if(caracter == '}') {
-                        i++;
-                        caracter = palavra.charAt(i);
-                    }
+
                     i++;
                     caracter = palavra.charAt(i);
                 } else {
@@ -66,6 +63,8 @@ public class Lexico {
                                 linha++;
                                 i++;
                                 caracter = palavra.charAt(i);
+                            } else {
+                                error();
                             }
                         }
                     }
@@ -136,7 +135,8 @@ public class Lexico {
 
         token.setLexema(num);
         token.setSimbolo("snum");
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+        token.setLinha(Integer.toString(linha));
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
         tokens.add(concat);
     }
 
@@ -232,8 +232,8 @@ public class Lexico {
         }
 
         token.setLexema(id);
-
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+        token.setLinha(Integer.toString(linha));
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
         tokens.add(concat);
     }
 
@@ -252,9 +252,10 @@ public class Lexico {
                 token.setSimbolo("smult");
                 break;
         }
+        token.setLinha(Integer.toString(linha));
         i++;
         caracter = palavra.charAt(i);
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
         tokens.add(concat);
     }
 
@@ -312,9 +313,11 @@ public class Lexico {
                 error();
                 break;
         }
+        token.setLinha(Integer.toString(linha));
         i++;
         caracter = palavra.charAt(i);
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
         tokens.add(concat);
     }
 
@@ -344,10 +347,11 @@ public class Lexico {
                error();
                break;
         }
+        token.setLinha(Integer.toString(linha));
         i++;
         caracter = palavra.charAt(i);
 
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
         tokens.add(concat);
     }
 
@@ -362,11 +366,11 @@ public class Lexico {
                 token.setLexema(":");
                 token.setSimbolo("sdoispontos");
             }
-
+            token.setLinha(Integer.toString(linha));
             i++;
             caracter = palavra.charAt(i);
 
-            String cocat = token.getLexema() + " " + token.getSimbolo() + " " + linha;
+            String cocat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
             tokens.add(cocat);
         }
     }

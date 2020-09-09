@@ -3,6 +3,7 @@ package Token;
 public class Token {
     String simbolo;
     String lexema;
+    String linha;
 
     public String getSimbolo() {
         return simbolo;
@@ -20,4 +21,11 @@ public class Token {
         this.lexema = lexema;
     }
 
+    public String getLinha() {
+        return linha;
+    }
+
+    public void setLinha(String linha) {
+        this.linha = linha;
+    }
 }
