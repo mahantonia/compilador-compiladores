@@ -32,7 +32,6 @@ public class Interface extends JFrame {
         criaPainel();
         criaBotao();
         criaAreaCodigo();
-        criaTabelaToken();
     }
 
     private void criaTela() {
@@ -71,6 +70,17 @@ public class Interface extends JFrame {
         rolagemAreaCodigo.setBounds(12,30, 560,716);
         rolagemAreaCodigo.setBackground(Color.GRAY);
         add(rolagemAreaCodigo);
+    }
+
+    private void criaTabelaToken() {
+        modeloTabelaToken = new DefaultTableModel(colunaToken, 0);
+        modeloTabelaToken.setNumRows(0);
+        tabelaToken = new JTable(modeloTabelaToken);
+        tabelaToken.setEnabled(false);
+        rolagemTabelaToken = new JScrollPane(tabelaToken);
+
+        rolagemTabelaToken.setBounds(602,30,346,718);
+        add(rolagemTabelaToken);
     }
 
     private void criaBotao() {
@@ -117,16 +127,20 @@ public class Interface extends JFrame {
 
 
     private void executaArquivo() throws Exception {
+        areaCodigo.setText(null);
+        criaTabelaToken();
         arquivo.carregaArquivo();
         areaCodigo.append(arquivo.getLinha());
     }
 
     private void compilarArquivo() throws Exception {
-        lexico.separaConteudo(arquivo.getLinha());
+        tabelaToken.clearSelection();
+        lexico.start(arquivo.getLinha());
         populaTabelaToken();
     }
 
     private void populaTabelaToken() {
+        modeloTabelaToken.setNumRows(0);
         for(int i = 0 ; i < lexico.getTokens().size(); i++){
             String[] lexSimLin = lexico.getTokens().get(i).split(" ");
 
@@ -136,18 +150,5 @@ public class Interface extends JFrame {
 
             modeloTabelaToken.addRow(linhaToken);
         }
-    }
-
-
-
-    private void criaTabelaToken() {
-        modeloTabelaToken = new DefaultTableModel(colunaToken, 0);
-        modeloTabelaToken.setNumRows(0);
-        tabelaToken = new JTable(modeloTabelaToken);
-        tabelaToken.setEnabled(false);
-        rolagemTabelaToken = new JScrollPane(tabelaToken);
-
-        rolagemTabelaToken.setBounds(602,30,346,718);
-        add(rolagemTabelaToken);
     }
 }

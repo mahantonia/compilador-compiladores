@@ -4,17 +4,26 @@ import Token.Token;
 import java.util.ArrayList;
 
 public class Lexico {
-    private int i = 0;
+    private int i;
     private char caracter;
     private String palavra;
-    private int linha = 1;
+    private int linha;
 
-    Token token = new Token();
-    ArrayList<String> tokens = new ArrayList<>();
+    Token token;
+    ArrayList<String> tokens;
 
     public ArrayList<String> getTokens() { return tokens; }
 
+    public void start(String conteudo)  throws Exception {
+        token = new Token();
+        tokens = new ArrayList<>();
+        i = 0;
+        linha = 1;
+        separaConteudo(conteudo);
+    }
+
     public void separaConteudo(String conteudo) throws Exception {
+
         palavra = conteudo;
         caracter = palavra.charAt(i);
 
@@ -39,7 +48,7 @@ public class Lexico {
                         if(caracter != '*'){
                             error();
                         } else {
-                            while (caracter != '*' ){
+                            while ((caracter != '/') ){
                                 if(caracter == '\n'){
                                     linha++;
                                     i++;
@@ -47,10 +56,11 @@ public class Lexico {
                                 i++;
                                 caracter = palavra.charAt(i);
                             }
-                            if(caracter != '/'){
+                            caracter = palavra.charAt(i-1);
+                            if(caracter != '*'){
                                 error();
                             } else {
-                                i++;
+                                i += 2;
                                 caracter = palavra.charAt(i);
                             }
                         }
