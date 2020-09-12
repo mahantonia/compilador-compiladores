@@ -44,6 +44,7 @@ public class Lexico {
                         i++;
                         caracter = palavra.charAt(i);
                         if(caracter != '*'){
+                            caracter = palavra.charAt(i-1);
                             error();
                         } else {
                             do {
@@ -388,6 +389,6 @@ public class Lexico {
     }
 
     private void error() throws Exception {
-        throw new Exception("Erro linha " + linha);
+        throw new Exception("Erro linha " + linha + " caracter: " + caracter);
     }
 }
