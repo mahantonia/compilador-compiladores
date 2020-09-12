@@ -35,7 +35,7 @@ public class Arquivo {
 
         while (scanner.hasNextLine()) {
             linha = linha + scanner.nextLine();
-            linha = linha.replaceAll("\t", "");
+//            linha = linha.replaceAll("\t", "");
             linha = linha + '\n';
         }
         linha = linha + '\0';

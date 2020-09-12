@@ -80,6 +80,7 @@ public class Interface extends JFrame {
         rolagemTabelaToken = new JScrollPane(tabelaToken);
 
         rolagemTabelaToken.setBounds(602,30,346,718);
+        rolagemTabelaToken.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         add(rolagemTabelaToken);
     }
 

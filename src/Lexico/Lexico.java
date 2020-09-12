@@ -28,7 +28,7 @@ public class Lexico {
         caracter = palavra.charAt(i);
 
         while (caracter != '\u0000'){
-            while ((caracter == '{') || (caracter == ' ') || (caracter == '\n') || (caracter == '/') && (i < palavra.length())) {
+            while ((caracter == '{') || (caracter == ' ') || (caracter == '\n')  || (caracter == '\t')|| (caracter == '/') && (i < palavra.length())) {
                 if(caracter == '{'){
                     while ((caracter != '}') && (i < palavra.length())) {
                         if(caracter == '\n'){
@@ -69,13 +69,18 @@ public class Lexico {
                                 i++;
                                 caracter = palavra.charAt(i);
                             } else {
-                                error();
+                                if(caracter == '\t') {
+                                    i++;
+                                    caracter = palavra.charAt(i);
+                                } else {
+                                    error();
+                                }
                             }
                         }
                     }
                 }
             }
-            if((caracter != '\n') && (caracter != '\u0000')) {
+            if((caracter != '\n') && (caracter != '\t') && (caracter != '\u0000')) {
                 geraToken();
             } else {
                 if(caracter != palavra.length()){
