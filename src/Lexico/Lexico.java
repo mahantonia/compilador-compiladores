@@ -281,7 +281,7 @@ public class Lexico {
                 i++;
                 caracter = palavra.charAt(i);
 
-                if(caracter != ' '){
+                if(caracter == '='){
                     op = op + caracter;
                 }
 
@@ -324,8 +324,10 @@ public class Lexico {
                 break;
         }
         token.setLinha(Integer.toString(linha));
-        i++;
-        caracter = palavra.charAt(i);
+        if(caracter == '='){
+            i++;
+            caracter = palavra.charAt(i);
+        }
 
         String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
         tokens.add(concat);
