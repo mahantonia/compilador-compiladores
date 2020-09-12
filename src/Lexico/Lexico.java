@@ -33,12 +33,10 @@ public class Lexico {
                     while ((caracter != '}') && (i < palavra.length())) {
                         if(caracter == '\n'){
                             linha++;
-                            i++;
                         }
                         i++;
                         caracter = palavra.charAt(i);
                     }
-
                     i++;
                     caracter = palavra.charAt(i);
                 } else {
@@ -48,21 +46,18 @@ public class Lexico {
                         if(caracter != '*'){
                             error();
                         } else {
-                            while ((caracter != '/') ){
-                                if(caracter == '\n'){
-                                    linha++;
+                            do {
+                                while ((caracter != '/') ){
+                                    if(caracter == '\n'){
+                                        linha++;
+                                    }
                                     i++;
+                                    caracter = palavra.charAt(i);
                                 }
-                                i++;
-                                caracter = palavra.charAt(i);
-                            }
-                            caracter = palavra.charAt(i-1);
-                            if(caracter != '*'){
-                                error();
-                            } else {
-                                i += 2;
-                                caracter = palavra.charAt(i);
-                            }
+                                caracter = palavra.charAt(i-1);
+                            } while (caracter != '*');
+                            i++;
+                            caracter = palavra.charAt(i);
                         }
                     }else{
                         if(caracter == ' '){
@@ -258,7 +253,7 @@ public class Lexico {
                 token.setSimbolo("smenos");
                 break;
             case '*':
-                token.setLexema("**");
+                token.setLexema("*");
                 token.setSimbolo("smult");
                 break;
         }
