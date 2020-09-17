@@ -77,10 +77,13 @@ public class Interface extends JFrame {
         modeloTabelaToken.setNumRows(0);
         tabelaToken = new JTable(modeloTabelaToken);
         tabelaToken.setEnabled(false);
+        tabelaToken.setAutoResizeMode(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         rolagemTabelaToken = new JScrollPane(tabelaToken);
+        rolagemTabelaToken.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
 
         rolagemTabelaToken.setBounds(602,30,346,718);
-        rolagemTabelaToken.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
         add(rolagemTabelaToken);
     }
 
@@ -130,8 +133,10 @@ public class Interface extends JFrame {
     private void executaArquivo() throws Exception {
         areaCodigo.setText(null);
         criaTabelaToken();
+        modeloTabelaToken.setNumRows(0);
+        rolagemTabelaToken.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         arquivo.carregaArquivo();
-        areaCodigo.append(arquivo.getLinha());
+        areaCodigo.append(arquivo.getLinhaNumero());
     }
 
     private void compilarArquivo() throws Exception {
@@ -150,6 +155,8 @@ public class Interface extends JFrame {
             linhaToken[2] = lexSimLin[2];
 
             modeloTabelaToken.addRow(linhaToken);
+
+            System.out.println("Lexema: " + linhaToken[0] + " | Simbolo: " + linhaToken[1] + " | Linha: " + linhaToken[2]);
         }
     }
 }

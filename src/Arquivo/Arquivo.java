@@ -2,12 +2,15 @@ package Arquivo;
 
 import javax.swing.*;
 import java.io.FileReader;
+import java.io.LineNumberReader;
 import java.util.Scanner;
 
 public class Arquivo {
     String linha;
+    String linhaNumero;
 
     public String getLinha() { return linha; }
+    public String getLinhaNumero() { return linhaNumero; }
 
     public void carregaArquivo() throws Exception {
         String caminhoArquivo;
@@ -30,6 +33,19 @@ public class Arquivo {
 
     private void lerArquivo(String caminho) throws Exception {
         linha = "";
+        linhaNumero = "";
+
+        FileReader file = new FileReader(caminho);
+
+        LineNumberReader numeroLinha = new LineNumberReader(file);
+
+        String line;
+
+        while ((line = numeroLinha.readLine()) != null) {
+            linhaNumero = linhaNumero + numeroLinha.getLineNumber() + "   " + line;
+            linhaNumero = linhaNumero + '\n';
+        }
+        linhaNumero = linhaNumero + '\0';
 
         Scanner scanner = new Scanner(new FileReader(caminho));
 
@@ -39,5 +55,6 @@ public class Arquivo {
             linha = linha + '\n';
         }
         linha = linha + '\0';
+
     }
 }

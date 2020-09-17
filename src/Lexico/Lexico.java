@@ -167,7 +167,7 @@ public class Lexico {
             while ((Character.isLetterOrDigit(caracter)) || (caracter == '_')){
                 id = id + caracter;
 
-                if(caracter == palavra.length()){
+                if(i == palavra.length()){
                     break;
                 } else {
                     i++;
@@ -278,7 +278,7 @@ public class Lexico {
         if(op.equals("=")){
             verificaOperadorRelacional(op);
         } else {
-            if(caracter != palavra.length()){
+            if((i != palavra.length())){
                 i++;
                 caracter = palavra.charAt(i);
 
