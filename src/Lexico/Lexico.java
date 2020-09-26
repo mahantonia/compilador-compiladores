@@ -1,6 +1,8 @@
 package Lexico;
 
+import ErroLexico.ErroLexico;
 import Token.Token;
+
 import java.util.ArrayList;
 
 public class Lexico {
@@ -8,15 +10,10 @@ public class Lexico {
     private char caracter;
     private String palavra;
     private int linha;
-
-    Token token;
-    ArrayList<String> tokens;
-
-    public ArrayList<String> getTokens() { return tokens; }
+    Token token = new Token();
 
     public void start(String conteudo)  throws Exception {
         token = new Token();
-        tokens = new ArrayList<>();
         i = 0;
         linha = 1;
         separaConteudo(conteudo);
@@ -33,6 +30,9 @@ public class Lexico {
                     while ((caracter != '}') && (i < palavra.length())) {
                         if(caracter == '\n'){
                             linha++;
+                        }
+                        if(caracter == '\u0000'){
+                            error();
                         }
                         i++;
                         caracter = palavra.charAt(i);
@@ -51,6 +51,9 @@ public class Lexico {
                                 while ((caracter != '/') ){
                                     if(caracter == '\n'){
                                         linha++;
+                                    }
+                                    if(caracter == '\u0000'){
+                                        error();
                                     }
                                     i++;
                                     caracter = palavra.charAt(i);
@@ -148,7 +151,7 @@ public class Lexico {
         token.setSimbolo("snum");
         token.setLinha(Integer.toString(linha));
         String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        tokens.add(concat);
+        token.addListaToken(concat);
     }
 
     private void trataIdentificarPalavraReservada() throws Exception {
@@ -245,7 +248,7 @@ public class Lexico {
         token.setLexema(id);
         token.setLinha(Integer.toString(linha));
         String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        tokens.add(concat);
+        token.addListaToken(concat);
     }
 
     private void trataOperadorAritmetico() {
@@ -267,7 +270,7 @@ public class Lexico {
         i++;
         caracter = palavra.charAt(i);
         String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        tokens.add(concat);
+        token.addListaToken(concat);
     }
 
     private void trataOperadorRelacional() throws Exception {
@@ -331,7 +334,7 @@ public class Lexico {
         }
 
         String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        tokens.add(concat);
+        token.addListaToken(concat);
     }
 
     private void trataPontuacao() throws Exception {
@@ -365,7 +368,7 @@ public class Lexico {
         caracter = palavra.charAt(i);
 
         String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        tokens.add(concat);
+        token.addListaToken(concat);
     }
 
     private void trataAtribuicao() {
@@ -383,12 +386,16 @@ public class Lexico {
             i++;
             caracter = palavra.charAt(i);
 
-            String cocat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-            tokens.add(cocat);
+            String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
+            token.addListaToken(concat);
         }
     }
 
     private void error() throws Exception {
-        throw new Exception("Erro linha " + linha + " caracter: " + caracter);
+        new ErroLexico().printaErro(linha);
+    }
+
+    public ArrayList<String> getListaToken() {
+        return token.getListaToken();
     }
 }

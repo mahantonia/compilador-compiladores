@@ -1,13 +1,15 @@
 package Token;
 
+import java.util.ArrayList;
+
 public class Token {
     String simbolo;
     String lexema;
     String linha;
 
-    public String getSimbolo() {
-        return simbolo;
-    }
+    ArrayList<String> listaToken = new ArrayList<>();
+
+    public String getSimbolo() { return simbolo; }
 
     public void setSimbolo(String simbolo) {
         this.simbolo = simbolo;
@@ -28,4 +30,8 @@ public class Token {
     public void setLinha(String linha) {
         this.linha = linha;
     }
+
+    public ArrayList<String> getListaToken() { return listaToken; }
+
+    public void addListaToken(String conteudo) { listaToken.add(conteudo); }
 }

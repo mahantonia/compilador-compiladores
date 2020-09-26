@@ -2,6 +2,7 @@ package Interface;
 
 import Arquivo.Arquivo;
 import Lexico.Lexico;
+import Token.Token;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -122,8 +123,9 @@ public class Interface extends JFrame {
                     compilarArquivo();
                 } catch (Exception exception) {
                     populaTabelaToken();
-                    String error = exception.toString();
+                    String error = exception.getMessage();
                     JOptionPane.showMessageDialog(null, error);
+
                 }
             }
         });
@@ -148,8 +150,8 @@ public class Interface extends JFrame {
 
     private void populaTabelaToken() {
         modeloTabelaToken.setNumRows(0);
-        for(int i = 0 ; i < lexico.getTokens().size(); i++){
-            String[] lexSimLin = lexico.getTokens().get(i).split(" ");
+        for(int i = 0 ; i < lexico.getListaToken().size(); i++){
+            String[] lexSimLin = lexico.getListaToken().get(i).split(" ");
 
             linhaToken[0] = lexSimLin[0];
             linhaToken[1] = lexSimLin[1];
