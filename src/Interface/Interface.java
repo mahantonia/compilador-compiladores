@@ -2,7 +2,6 @@ package Interface;
 
 import Arquivo.Arquivo;
 import Lexico.Lexico;
-import Token.Token;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

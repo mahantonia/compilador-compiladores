@@ -7,7 +7,7 @@ public class Token {
     String lexema;
     String linha;
 
-    ArrayList<String> listaToken = new ArrayList<>();
+    public ArrayList<String> listaToken = new ArrayList<>();
 
     public String getSimbolo() { return simbolo; }
 

@@ -1,6 +1,7 @@
 package Lexico;
 
 import ErroLexico.ErroLexico;
+import Sintatico.Sintatico;
 import Token.Token;
 
 import java.util.ArrayList;
@@ -10,10 +11,12 @@ public class Lexico {
     private char caracter;
     private String palavra;
     private int linha;
-    Token token = new Token();
+    Token token;
+    Sintatico sintatico;
 
     public void start(String conteudo)  throws Exception {
         token = new Token();
+        sintatico = new Sintatico();
         i = 0;
         linha = 1;
         separaConteudo(conteudo);
@@ -72,6 +75,9 @@ public class Lexico {
                                 linha++;
                                 i++;
                                 caracter = palavra.charAt(i);
+                                if(token.listaToken.size() > 0){
+//                                    sintatico.start(token);
+                                }
                             } else {
                                 if(caracter == '\t') {
                                     i++;
@@ -87,13 +93,16 @@ public class Lexico {
             if((caracter != '\n') && (caracter != '\t') && (caracter != '\u0000')) {
                 geraToken();
             } else {
-                if(caracter != palavra.length()){
+                if(caracter != palavra.length()) {
                     i++;
                 } else {
-                    break;
+//                    if(caracter == palavra.length() || (caracter == '\u0000')){
+//                        sintatico.start(token);
+//                    }
                 }
             }
         }
+        sintatico.start(token);
     }
 
     private void geraToken() throws Exception {
