@@ -76,7 +76,7 @@ public class Lexico {
                                 i++;
                                 caracter = palavra.charAt(i);
                                 if(token.listaToken.size() > 0){
-//                                    sintatico.start(token);
+                                    sintatico.start(token);
                                 }
                             } else {
                                 if(caracter == '\t') {
@@ -90,7 +90,7 @@ public class Lexico {
                     }
                 }
             }
-            if((caracter != '\n') && (caracter != '\t') && (caracter != '\u0000')) {
+            if(caracter != '\u0000') {
                 geraToken();
             } else {
                 if(caracter != palavra.length()) {
@@ -102,7 +102,7 @@ public class Lexico {
                 }
             }
         }
-        sintatico.start(token);
+//        sintatico.start(token);
     }
 
     private void geraToken() throws Exception {
@@ -392,8 +392,8 @@ public class Lexico {
                 token.setSimbolo("sdoispontos");
             }
             token.setLinha(Integer.toString(linha));
-            i++;
-            caracter = palavra.charAt(i);
+//            i++;
+//            caracter = palavra.charAt(i);
 
             String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
             token.addListaToken(concat);
