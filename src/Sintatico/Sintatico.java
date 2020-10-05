@@ -7,13 +7,12 @@ public class Sintatico {
     private Token listaToken;
     private int index;
     private int tamanhoListaToken;
-    private int lexema = 0;
-    private int simbolo = 1;
-    private int linha = 2;
+    private final int lexema = 0;
+    private final int simbolo = 1;
+    private final int linha = 2;
     private String tokenSelecionado;
-    private String tokenSeparado[];
-    private boolean entrouAnalisaBloco = false;
-    private boolean entrouAnalisaSubRotina = false;
+    private String[] tokenSeparado;
+
     public void start(Token token) throws Exception {
         index = 0;
         listaToken = token;
@@ -38,7 +37,7 @@ public class Sintatico {
                         tokenSeparado = tokenSelecionado.split(" ");
                         if (tokenSeparado[simbolo].equals("sponto_virgula")) {
                             analisaBloco();
-                            if(entrouAnalisaBloco) {
+                            if(continuaSintatico()) {
                                 if(tokenSeparado[simbolo].equals("sponto")){
                                     if(!continuaSintatico()){
                                         error();
@@ -62,7 +61,6 @@ public class Sintatico {
     private void analisaBloco() throws Exception {
         index++;
         if(continuaSintatico()){
-            entrouAnalisaBloco = true;
             tokenSelecionado = getToken(index);
             tokenSeparado = tokenSelecionado.split(" ");
 
@@ -70,11 +68,7 @@ public class Sintatico {
             analisaSubRotina();
             if(continuaSintatico()) {
                 analisaComandos();
-            } else {
-                entrouAnalisaBloco = false;
             }
-        } else {
-            entrouAnalisaBloco = false;
         }
     }
     private void analisaVariaveis() throws Exception {
@@ -188,12 +182,8 @@ public class Sintatico {
                     if(flag == 1) {
 //
                     }
-                } else {
-                    entrouAnalisaSubRotina = false;
                 }
             }
-        } else {
-            entrouAnalisaBloco = true;
         }
     }
 
