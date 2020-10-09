@@ -130,7 +130,6 @@ public class Interface extends JFrame {
         });
     }
 
-
     private void executaArquivo() throws Exception {
         System.out.println("\n");
         areaCodigo.setText(null);

@@ -333,7 +333,7 @@ public class Sintatico {
         }
     }
 
-  private void analisaAtribuicao() throws Exception {
+    private void analisaAtribuicao() throws Exception {
       index++;
       if(continuaSintatico()) {
           tokenSelecionado = getToken(index);
