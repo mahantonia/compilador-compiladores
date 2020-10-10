@@ -2,6 +2,7 @@ package Interface;
 
 import Arquivo.Arquivo;
 import Lexico.Lexico;
+import Sintatico.Sintatico;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +26,7 @@ public class Interface extends JFrame {
     Object[] linhaToken = new Object[3];
 
     Arquivo arquivo = new Arquivo();
-    Lexico lexico = new Lexico();
+    Sintatico sintatico = new Sintatico();
 
     public void start() {
         criaTela();
@@ -142,14 +143,14 @@ public class Interface extends JFrame {
 
     private void compilarArquivo() throws Exception {
         tabelaToken.clearSelection();
-        lexico.start(arquivo.getLinha());
+        sintatico.start(arquivo.getLinha());
         populaTabelaToken();
     }
 
     private void populaTabelaToken() {
         modeloTabelaToken.setNumRows(0);
-        for(int i = 0 ; i < lexico.getListaToken().size(); i++){
-            String[] lexSimLin = lexico.getListaToken().get(i).split(" ");
+        for(int i = 0 ; i < sintatico.getListaToken().size(); i++){
+            String[] lexSimLin = sintatico.getListaToken().get(i).split(" ");
 
             linhaToken[0] = lexSimLin[0];
             linhaToken[1] = lexSimLin[1];

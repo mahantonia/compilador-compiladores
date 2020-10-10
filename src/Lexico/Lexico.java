@@ -1,30 +1,28 @@
 package Lexico;
 
 import ErroLexico.ErroLexico;
-import Sintatico.Sintatico;
 import Token.Token;
 
-import java.util.ArrayList;
-
 public class Lexico {
-    private int i;
+    private int i = 0;
     private char caracter;
     private String palavra;
     private int linha;
+    private String conteudoArquivo;
     Token token;
-    Sintatico sintatico;
 
-    public void start(String conteudo)  throws Exception {
-        token = new Token();
-        sintatico = new Sintatico();
+    public String getConteudoArquivo() { return conteudoArquivo; }
+
+    public Lexico(String conteudo, Token token) {
+        conteudoArquivo = conteudo;
+        this.token = token;
         i = 0;
         linha = 1;
-        separaConteudo(conteudo);
     }
 
-    public void separaConteudo(String conteudo) throws Exception {
+    public void adicionaTokenLista() throws Exception {
 
-        palavra = conteudo;
+        palavra = getConteudoArquivo();
         caracter = palavra.charAt(i);
 
         while (caracter != '\u0000'){
@@ -75,9 +73,6 @@ public class Lexico {
                                 linha++;
                                 i++;
                                 caracter = palavra.charAt(i);
-                                if(token.listaToken.size() > 0){
-//                                    sintatico.start(token);
-                                }
                             } else {
                                 if(caracter == '\t') {
                                     i++;
@@ -92,17 +87,13 @@ public class Lexico {
             }
             if(caracter != '\u0000') {
                 geraToken();
+                break;
             } else {
                 if(caracter != palavra.length()) {
                     i++;
-                } else {
-//                    if(caracter == palavra.length() || (caracter == '\u0000')){
-//                        sintatico.start(token);
-//                    }
                 }
             }
         }
-        sintatico.start(token);
     }
 
     private void geraToken() throws Exception {
@@ -395,9 +386,6 @@ public class Lexico {
                 token.setSimbolo("sdoispontos");
             }
             token.setLinha(Integer.toString(linha));
-//            i++;
-//            caracter = palavra.charAt(i);
-
             String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
             token.addListaToken(concat);
         }
@@ -405,9 +393,5 @@ public class Lexico {
 
     private void error() throws Exception {
         new ErroLexico().printaErro(linha);
-    }
-
-    public ArrayList<String> getListaToken() {
-        return token.getListaToken();
     }
 }

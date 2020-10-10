@@ -1,125 +1,71 @@
 package Sintatico;
 
 import ErroSintatico.ErroSintatico;
+import Lexico.Lexico;
 import Token.Token;
 
+import java.util.ArrayList;
+
 public class Sintatico {
-    private Token listaToken;
+    private Token token;
+    private Lexico lexico;
     private int index;
-    private int tamanhoListaToken;
     private final int lexema = 0;
     private final int simbolo = 1;
     private final int linha = 2;
     private String tokenSelecionado;
     private String[] tokenSeparado;
 
-    public void start(Token token) throws Exception {
+    public void start(String conteudo) throws Exception {
+        token = new Token();
+        lexico = new Lexico(conteudo, token);
         index = 0;
-        listaToken = token;
-        tamanhoListaToken = token.listaToken.size();
         analisaSintatico();
     }
 
+    public ArrayList<String> getListaToken() {
+        return token.getListaToken();
+    }
+
     private void analisaSintatico() throws Exception {
-        tokenSelecionado = getToken(index);
-        tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
         if (tokenSeparado[simbolo].equals("sprograma")) {
-            index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-
-                if (tokenSeparado[simbolo].equals("sidentificador")) {
-                    index++;
-                    if(continuaSintatico()) {
-                        tokenSelecionado = getToken(index);
-                        tokenSeparado = tokenSelecionado.split(" ");
-                        if (tokenSeparado[simbolo].equals("sponto_virgula")) {
-                            analisaBloco();
-                            if(continuaSintatico()) {
-                                if(tokenSeparado[simbolo].equals("sponto")){
-                                    if(!continuaSintatico()){
-                                        error();
-                                    }
-                                } else {
-                                    error();
-                                }
-                            }
-                        } else {
-                            error();
-                        }
+            tokenSeparado = getToken();
+            if (tokenSeparado[simbolo].equals("sidentificador")) {
+                tokenSeparado = getToken();
+                if (tokenSeparado[simbolo].equals("sponto_virgula")) {
+                    analisaBloco();
+                    if(tokenSeparado[simbolo].equals("sponto")){
+                        System.out.println("Compilado com sucesso =)");
+                    } else {
+                        error();
                     }
+                } else {
+                    error();
                 }
             }
-
         } else {
             error();
         }
     }
 
     private void analisaBloco() throws Exception {
-        index++;
-        if(continuaSintatico()){
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            analisaVariaveis();
-            analisaSubRotina();
-            if(continuaSintatico()) {
-                analisaComandos();
-            }
-        }
+        analisaVariaveis();
+        analisaSubRotina();
+        analisaComandos();
     }
+
     private void analisaVariaveis() throws Exception {
         if(tokenSeparado[simbolo].equals("svar")){
-            index++;
-
-            if(continuaSintatico()){
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-
-                if(tokenSeparado[simbolo].equals("sidentificador")){
-                    while (tokenSeparado[simbolo].equals("sidentificador")){
-                        analisaVariavel();
-                        if(tokenSeparado[simbolo].equals("sponto_virgula")){
-                            index++;
-
-                            if(continuaSintatico()) {
-                                tokenSelecionado = getToken(index);
-                                tokenSeparado = tokenSelecionado.split(" ");
-                            }
-                        } else {
-                            error();
-                        }
-                    }
-                } else {
-                    error();
-                }
-            }
-        }
-    }
-
-    private void analisaVariavel() throws Exception {
-        do {
-            if(tokenSeparado[simbolo].equals("sidentificador")) {
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
-
-                    if((tokenSeparado[simbolo].equals("svirgula")) || (tokenSeparado[simbolo].equals("sdoispontos"))) {
-                        if(tokenSeparado[simbolo].equals("svirgula")) {
-                            index++;
-                            if(continuaSintatico()) {
-                                tokenSelecionado = getToken(index);
-                                tokenSeparado = tokenSelecionado.split(" ");
-
-                                if(tokenSeparado[simbolo].equals("sdoispontos")) {
-                                    error();
-                                }
-                            }
-                        }
+            tokenSeparado = getToken();
+            if(tokenSeparado[simbolo].equals("sidentificador")){
+                while (tokenSeparado[simbolo].equals("sidentificador")){
+                    analisaVariavel();
+                    if(tokenSeparado[simbolo].equals("sponto_virgula")){
+                        tokenSeparado = getToken();
                     } else {
                         error();
                     }
@@ -127,30 +73,38 @@ public class Sintatico {
             } else {
                 error();
             }
-        }while (!tokenSeparado[simbolo].equals("sdoispontos"));
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
-
-            analisaTipo();
         }
+    }
+
+    private void analisaVariavel() throws Exception {
+        do {
+            if(tokenSeparado[simbolo].equals("sidentificador")) {
+                tokenSeparado = getToken();
+                if((tokenSeparado[simbolo].equals("svirgula")) || (tokenSeparado[simbolo].equals("sdoispontos"))) {
+                    if(tokenSeparado[simbolo].equals("svirgula")) {
+                        tokenSeparado = getToken();
+                        if(tokenSeparado[simbolo].equals("sdoispontos")) {
+                            error();
+                        }
+                    }
+                } else {
+                    error();
+                }
+            } else {
+                error();
+            }
+        }while (!tokenSeparado[simbolo].equals("sdoispontos"));
+
+        tokenSeparado = getToken();
+        analisaTipo();
     }
 
     private void analisaTipo() throws Exception {
         if(tokenSeparado[simbolo].equals("sinteiro")){
-            index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-            }
+            tokenSeparado = getToken();
         } else {
             if(tokenSeparado[simbolo].equals("sbooleano")){
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
-                }
+                tokenSeparado = getToken();
             } else {
                 error();
             }
@@ -168,128 +122,79 @@ public class Sintatico {
                     analisaDeclaracaoFuncao();
                 }
 
-                if(continuaSintatico()) {
-                    if(tokenSeparado[simbolo].equals("sponto_virgula")) {
-                        index++;
-                        if(continuaSintatico()) {
-                            tokenSelecionado = getToken(index);
-                            tokenSeparado = tokenSelecionado.split(" ");
-                        }
-                    } else {
-                        error();
-                    }
 
-                    if(flag == 1) {
-//
-                    }
+                if(tokenSeparado[simbolo].equals("sponto_virgula")) {
+                    tokenSeparado = getToken();
+                } else {
+                    error();
+                }
+
+                if(flag == 1) {
+
                 }
             }
         }
     }
 
     private void analisaDeclaracaoProcedimento() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            if(tokenSeparado[simbolo].equals("sidentificador")) {
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
-
-                    if(tokenSeparado[simbolo].equals("sponto_virgula")) {
-                        analisaBloco();
-                    } else {
-                        error();
-                    }
-                }
+        if(tokenSeparado[simbolo].equals("sidentificador")) {
+            tokenSeparado = getToken();
+            if(tokenSeparado[simbolo].equals("sponto_virgula")) {
+                analisaBloco();
             } else {
                 error();
             }
+        } else {
+            error();
         }
     }
 
     private void analisaDeclaracaoFuncao() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            if(tokenSeparado[simbolo].equals("sidentificador")) {
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
+        if(tokenSeparado[simbolo].equals("sidentificador")) {
+            tokenSeparado = getToken();
 
-                    if(tokenSeparado[simbolo].equals("sdoispontos")) {
-                        index++;
-                        if(continuaSintatico()) {
-                            tokenSelecionado = getToken(index);
-                            tokenSeparado = tokenSelecionado.split(" ");
-                        }
+            if(tokenSeparado[simbolo].equals("sdoispontos")) {
+                tokenSeparado = getToken();
+                if((tokenSeparado[simbolo].equals("sinteiro")) || (tokenSeparado[simbolo].equals("sbooleano"))) {
+                    tokenSeparado = getToken();
 
-                        if((tokenSeparado[simbolo].equals("sinteiro")) || (tokenSeparado[simbolo].equals("sbooleano"))) {
-                            index++;
-                            if(continuaSintatico()) {
-                                tokenSelecionado = getToken(index);
-                                tokenSeparado = tokenSelecionado.split(" ");
-
-                                if(tokenSeparado[simbolo].equals("sponto_virgula")) {
-                                    analisaBloco();
-                                }
-                            }
-                        } else {
-                            error();
-                        }
-                    } else {
-                        error();
+                    if(tokenSeparado[simbolo].equals("sponto_virgula")) {
+                        analisaBloco();
                     }
+
+                } else {
+                    error();
                 }
             } else {
                 error();
             }
+        } else {
+            error();
         }
     }
 
     private void analisaComandos() throws Exception {
         if(tokenSeparado[simbolo].equals("sinicio")) {
-            index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
+            tokenSeparado = getToken();
 
-                analisaComandoSimples();
-                while (!tokenSeparado[simbolo].equals("sfim")) {
-                    if(continuaSintatico()) {
-                        if(tokenSeparado[simbolo].equals("sponto_virgula")) {
-                            index++;
-                            if(continuaSintatico()) {
-                                tokenSelecionado = getToken(index);
-                                tokenSeparado = tokenSelecionado.split(" ");
-
-                                if(!tokenSeparado[simbolo].equals("sfim")) {
-                                    analisaComandoSimples();
-                                }
-                            }
-                        } else {
-                            error();
-                        }
-                    } else {
-                        break;
+            analisaComandoSimples();
+            while (!tokenSeparado[simbolo].equals("sfim")) {
+                if(tokenSeparado[simbolo].equals("sponto_virgula")) {
+                    tokenSeparado = getToken();
+                    if(!tokenSeparado[simbolo].equals("sfim")) {
+                        analisaComandoSimples();
                     }
+                } else {
+                    error();
                 }
+            }
 
-                if(continuaSintatico()) {
-                    if(tokenSeparado[simbolo].equals("sfim")) {
-                        index++;
-                        if(continuaSintatico()) {
-                            tokenSelecionado = getToken(index);
-                            tokenSeparado = tokenSelecionado.split(" ");
-                        }
-                    }
-                }
+            if(tokenSeparado[simbolo].equals("sfim")) {
+                tokenSeparado = getToken();
             }
         } else {
             error();
@@ -320,27 +225,19 @@ public class Sintatico {
     }
 
     private void analisaAtribuicaoChamadaProcedimento() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            if(tokenSeparado[simbolo].equals("satribuicao")) {
-                analisaAtribuicao();
-            } else {
-                analisaChamadaProcedimento();
-            }
+        if(tokenSeparado[simbolo].equals("satribuicao")) {
+            analisaAtribuicao();
+        } else {
+            analisaChamadaProcedimento();
         }
     }
 
     private void analisaAtribuicao() throws Exception {
-      index++;
-      if(continuaSintatico()) {
-          tokenSelecionado = getToken(index);
-          tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-          analisaExpressao();
-      }
+        analisaExpressao();
     }
 
     private void analisaChamadaProcedimento() throws Exception {
@@ -359,34 +256,20 @@ public class Sintatico {
     }
 
     private void analisaSe() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            analisaExpressao();
-            if(continuaSintatico()) {
-                if(tokenSeparado[simbolo].equals("sentao")) {
-                    index++;
-                    if(continuaSintatico()) {
-                        tokenSelecionado = getToken(index);
-                        tokenSeparado = tokenSelecionado.split(" ");
+        analisaExpressao();
 
-                        analisaComandoSimples();
+        if(tokenSeparado[simbolo].equals("sentao")) {
+            tokenSeparado = getToken();
+            analisaComandoSimples();
 
-                        if(tokenSeparado[simbolo].equals("ssenao")) {
-                            index++;
-                            if(continuaSintatico()) {
-                                tokenSelecionado = getToken(index);
-                                tokenSeparado = tokenSelecionado.split(" ");
-                                analisaComandoSimples();
-                            }
-                        }
-                    }
-                } else {
-                    error();
-                }
+            if(tokenSeparado[simbolo].equals("ssenao")) {
+                tokenSeparado = getToken();
+                analisaComandoSimples();
             }
+        } else {
+            error();
         }
     }
 
@@ -400,35 +283,21 @@ public class Sintatico {
                 || (tokenSeparado[simbolo].equals("smenorig"))
                 || (tokenSeparado[simbolo].equals("sdif"))
         ) {
-            index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-
-                analisaExpressaoSimples();
-            }
+            tokenSeparado = getToken();
+            analisaExpressaoSimples();
         }
     }
 
     private void analisaExpressaoSimples() throws Exception {
         if((tokenSeparado[simbolo].equals("smais")) || (tokenSeparado[simbolo].equals("smenos"))) {
-            index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-            }
+            tokenSeparado = getToken();
         }
 
         analisaTermo();
 
         while ((tokenSeparado[simbolo].equals("smais")) || (tokenSeparado[simbolo].equals("smenos")) || (tokenSeparado[simbolo].equals("sou"))) {
-            index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-
-                analisaTermo();
-            }
+            tokenSeparado = getToken();
+            analisaTermo();
         }
     }
 
@@ -437,12 +306,8 @@ public class Sintatico {
 
         while ((tokenSeparado[simbolo].equals("smult")) || (tokenSeparado[simbolo].equals("sdiv")) || (tokenSeparado[simbolo].equals("se"))) {
             index++;
-            if(continuaSintatico()) {
-                tokenSelecionado = getToken(index);
-                tokenSeparado = tokenSelecionado.split(" ");
-
-                analisaFator();
-            }
+            tokenSeparado = getToken();
+            analisaFator();
         }
     }
 
@@ -451,46 +316,24 @@ public class Sintatico {
             analisaChamadaFuncao();
         } else {
             if(tokenSeparado[simbolo].equals("snumero")) {
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
-                }
+                tokenSeparado = getToken();
             } else {
                 if(tokenSeparado[simbolo].equals("snao")) {
-                    index++;
-                    if(continuaSintatico()) {
-                        tokenSelecionado = getToken(index);
-                        tokenSeparado = tokenSelecionado.split(" ");
-
-                        analisaFator();
-                    }
+                    tokenSeparado = getToken();
+                    analisaFator();
                 } else {
                     if(tokenSeparado[simbolo].equals("sabre_parenteses")) {
-                        index++;
-                        if(continuaSintatico()) {
-                            tokenSelecionado = getToken(index);
-                            tokenSeparado = tokenSelecionado.split(" ");
+                        tokenSeparado = getToken();
+                        analisaExpressao();
 
-                            analisaExpressao();
-
-                            if(tokenSeparado[simbolo].equals("sfecha_parenteses")) {
-                                index++;
-                                if(continuaSintatico()) {
-                                    tokenSelecionado = getToken(index);
-                                    tokenSeparado = tokenSelecionado.split(" ");
-                                }
-                            } else {
-                                error();
-                            }
+                        if(tokenSeparado[simbolo].equals("sfecha_parenteses")) {
+                            tokenSeparado = getToken();
+                        } else {
+                            error();
                         }
                     } else {
                         if((tokenSeparado[simbolo].equals("verdadeiro")) || (tokenSeparado[simbolo].equals("falso"))) {
-                            index++;
-                            if(continuaSintatico()) {
-                                tokenSelecionado = getToken(index);
-                                tokenSeparado = tokenSelecionado.split(" ");
-                            }
+                            tokenSeparado = getToken();
                         } else {
                             error();
                         }
@@ -507,110 +350,64 @@ public class Sintatico {
             error();
         }
 
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
-        }
+        tokenSeparado = getToken();
     }
 
     private void analisaEnquanto() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            analisaExpressao();
+        analisaExpressao();
 
-            if(continuaSintatico()) {
-                if(tokenSeparado[simbolo].equals("sfaca")) {
-                    index++;
-                    if(continuaSintatico()) {
-                        tokenSelecionado = getToken(index);
-                        tokenSeparado = tokenSelecionado.split(" ");
-
-                        analisaComandoSimples();
-                    }
-                } else {
-                    error();
-                }
-            }
+        if(tokenSeparado[simbolo].equals("sfaca")) {
+            tokenSeparado = getToken();
+            analisaComandoSimples();
+        } else {
+            error();
         }
+
     }
 
     private void analisaLeia() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            if(tokenSeparado[simbolo].equals("sabre_parenteses")) {
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
+        if(tokenSeparado[simbolo].equals("sabre_parenteses")) {
+            tokenSeparado = getToken();
 
-                    if(tokenSeparado[simbolo].equals("sidentificador")) {
-                        index++;
-                        if(continuaSintatico()) {
-                            tokenSelecionado = getToken(index);
-                            tokenSeparado = tokenSelecionado.split(" ");
+            if(tokenSeparado[simbolo].equals("sidentificador")) {
+                tokenSeparado = getToken();
 
-                            if(tokenSeparado[simbolo].equals("sfecha_parenteses")) {
-                                index++;
-                                if(continuaSintatico()) {
-                                    tokenSelecionado = getToken(index);
-                                    tokenSeparado = tokenSelecionado.split(" ");
-                                }
-                            } else {
-                                error();
-                            }
-                        }
-                    } else {
-                        error();
-                    }
+                if(tokenSeparado[simbolo].equals("sfecha_parenteses")) {
+                    tokenSeparado = getToken();
+                } else {
+                    error();
                 }
             } else {
                 error();
             }
+        } else {
+            error();
         }
     }
 
     private void analisaEscreva() throws Exception {
-        index++;
-        if(continuaSintatico()) {
-            tokenSelecionado = getToken(index);
-            tokenSeparado = tokenSelecionado.split(" ");
+        tokenSeparado = getToken();
 
-            if(tokenSeparado[simbolo].equals("sabre_parenteses")) {
-                index++;
-                if(continuaSintatico()) {
-                    tokenSelecionado = getToken(index);
-                    tokenSeparado = tokenSelecionado.split(" ");
+        if(tokenSeparado[simbolo].equals("sabre_parenteses")) {
+            tokenSeparado = getToken();
 
-                    if(tokenSeparado[simbolo].equals("sidentificador")) {
-                        index++;
-                        if(continuaSintatico()) {
-                            tokenSelecionado = getToken(index);
-                            tokenSeparado = tokenSelecionado.split(" ");
+            if(tokenSeparado[simbolo].equals("sidentificador")) {
+                tokenSeparado = getToken();
 
-                            if(tokenSeparado[simbolo].equals("sfecha_parenteses")) {
-                                index++;
-                                if(continuaSintatico()) {
-                                    tokenSelecionado = getToken(index);
-                                    tokenSeparado = tokenSelecionado.split(" ");
-                                }
-                            } else {
-                                error();
-                            }
-                        }
-                    } else {
-                        error();
-                    }
+                if(tokenSeparado[simbolo].equals("sfecha_parenteses")) {
+                    tokenSeparado = getToken();
+                } else {
+                    error();
                 }
             } else {
                 error();
             }
+        } else {
+            error();
         }
     }
 
@@ -618,15 +415,10 @@ public class Sintatico {
         new ErroSintatico().printaErro(Integer.parseInt(tokenSeparado[linha]));
     }
 
-    private String getToken(int posicao) {
-        return listaToken.listaToken.get(posicao);
-    }
-
-    private boolean continuaSintatico() {
-        if(index < tamanhoListaToken) {
-            return true;
-        } else {
-            return false;
-        }
+    private String[] getToken() throws Exception {
+        lexico.adicionaTokenLista();
+        tokenSelecionado = token.listaToken.get(index);
+        index ++;
+        return tokenSelecionado.split(" ");
     }
 }
