@@ -21,14 +21,15 @@ public class Interface extends JFrame {
     private JScrollPane rolagemTabelaToken;
     private JScrollPane rolagemAreaCodigo;
     private DefaultTableModel modeloTabelaToken;
+    Arquivo arquivo;
+    Sintatico sintatico;
 
     final String[] colunaToken = new String[] {"Lexema", "Simbolo", "Linha"};
     Object[] linhaToken = new Object[3];
 
-    Arquivo arquivo = new Arquivo();
-    Sintatico sintatico = new Sintatico();
-
     public void start() {
+        arquivo = new Arquivo();
+        sintatico = new Sintatico();
         criaTela();
         criaPainel();
         criaBotao();

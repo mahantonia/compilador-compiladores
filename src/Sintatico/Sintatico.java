@@ -180,22 +180,26 @@ public class Sintatico {
     private void analisaComandos() throws Exception {
         if(tokenSeparado[simbolo].equals("sinicio")) {
             tokenSeparado = getToken();
-
-            analisaComandoSimples();
-            while (!tokenSeparado[simbolo].equals("sfim")) {
-                if(tokenSeparado[simbolo].equals("sponto_virgula")) {
-                    tokenSeparado = getToken();
-                    if(!tokenSeparado[simbolo].equals("sfim")) {
-                        analisaComandoSimples();
+            if(!tokenSeparado[simbolo].equals("sinicio")) {
+                analisaComandoSimples();
+                while (!tokenSeparado[simbolo].equals("sfim")) {
+                    if(tokenSeparado[simbolo].equals("sponto_virgula")) {
+                        tokenSeparado = getToken();
+                        if(!tokenSeparado[simbolo].equals("sfim")) {
+                            analisaComandoSimples();
+                        }
+                    } else {
+                        error();
                     }
-                } else {
-                    error();
                 }
+
+                if(tokenSeparado[simbolo].equals("sfim")) {
+                    tokenSeparado = getToken();
+                }
+            } else {
+                error();
             }
 
-            if(tokenSeparado[simbolo].equals("sfim")) {
-                tokenSeparado = getToken();
-            }
         } else {
             error();
         }
@@ -305,7 +309,6 @@ public class Sintatico {
         analisaFator();
 
         while ((tokenSeparado[simbolo].equals("smult")) || (tokenSeparado[simbolo].equals("sdiv")) || (tokenSeparado[simbolo].equals("se"))) {
-            index++;
             tokenSeparado = getToken();
             analisaFator();
         }

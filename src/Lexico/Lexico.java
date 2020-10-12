@@ -9,7 +9,7 @@ public class Lexico {
     private String palavra;
     private int linha;
     private String conteudoArquivo;
-    Token token;
+    private Token token;
 
     public String getConteudoArquivo() { return conteudoArquivo; }
 
