@@ -3,6 +3,8 @@ package Lexico;
 import ErroLexico.ErroLexico;
 import Token.Token;
 
+import java.util.Stack;
+
 public class Lexico {
     private int i = 0;
     private char caracter;

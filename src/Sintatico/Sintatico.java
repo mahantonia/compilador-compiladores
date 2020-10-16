@@ -180,7 +180,6 @@ public class Sintatico {
     private void analisaComandos() throws Exception {
         if(tokenSeparado[simbolo].equals("sinicio")) {
             tokenSeparado = getToken();
-            if(!tokenSeparado[simbolo].equals("sinicio")) {
                 analisaComandoSimples();
                 while (!tokenSeparado[simbolo].equals("sfim")) {
                     if(tokenSeparado[simbolo].equals("sponto_virgula")) {
@@ -192,14 +191,9 @@ public class Sintatico {
                         error();
                     }
                 }
-
                 if(tokenSeparado[simbolo].equals("sfim")) {
                     tokenSeparado = getToken();
                 }
-            } else {
-                error();
-            }
-
         } else {
             error();
         }
