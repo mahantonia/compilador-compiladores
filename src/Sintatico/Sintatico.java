@@ -191,9 +191,10 @@ public class Sintatico {
                         error();
                     }
                 }
-                if(tokenSeparado[simbolo].equals("sfim")) {
-                    tokenSeparado = getToken();
-                }
+                tokenSeparado = getToken();
+//                if(tokenSeparado[simbolo].equals("sfim")) {
+//                    tokenSeparado = getToken();
+//                }
         } else {
             error();
         }
@@ -414,8 +415,11 @@ public class Sintatico {
 
     private String[] getToken() throws Exception {
         lexico.adicionaTokenLista();
-        tokenSelecionado = token.listaToken.get(index);
-        index ++;
+        if(index != token.listaToken.size()){
+            tokenSelecionado = token.listaToken.get(index);
+            index ++;
+            return tokenSelecionado.split(" ");
+        }
         return tokenSelecionado.split(" ");
     }
 }
