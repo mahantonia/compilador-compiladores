@@ -7,7 +7,15 @@ public class Token {
     String lexema;
     String linha;
 
-    public ArrayList<String> listaToken = new ArrayList<>();
+    public Token(String simbolo, String lexema, String linha) {
+        this.simbolo = simbolo;
+        this.lexema = lexema;
+        this.linha = linha;
+    }
+
+    public Token() { }
+
+    public ArrayList<Token> listaToken = new ArrayList<>();
 
     public String getSimbolo() { return simbolo; }
 
@@ -31,7 +39,7 @@ public class Token {
         this.linha = linha;
     }
 
-    public ArrayList<String> getListaToken() { return listaToken; }
+    public ArrayList<Token> getListaToken() { return listaToken; }
 
-    public void addListaToken(String conteudo) { listaToken.add(conteudo); }
+    public void addListaToken(Token conteudo) { listaToken.add(conteudo); }
 }

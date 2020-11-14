@@ -152,8 +152,8 @@ public class Lexico {
         token.setLexema(num);
         token.setSimbolo("snumero");
         token.setLinha(Integer.toString(linha));
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        token.addListaToken(concat);
+
+        token.addListaToken(new Token(token.getSimbolo(), token.getLexema(), token.getLinha()));
     }
 
     private void trataIdentificarPalavraReservada() throws Exception {
@@ -242,6 +242,11 @@ public class Lexico {
             case "nao":
                 token.setSimbolo("snao");
                 break;
+            case "verdadeiro":
+                token.setSimbolo("sverdadeiro");
+                break;
+            case "falso":
+                token.setSimbolo("sfalso");
             default:
                 token.setSimbolo("sidentificador");
                 break;
@@ -249,8 +254,8 @@ public class Lexico {
 
         token.setLexema(id);
         token.setLinha(Integer.toString(linha));
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        token.addListaToken(concat);
+
+        token.addListaToken(new Token(token.getSimbolo(), token.getLexema(), token.getLinha()));
     }
 
     private void trataOperadorAritmetico() {
@@ -271,8 +276,8 @@ public class Lexico {
         token.setLinha(Integer.toString(linha));
         i++;
         caracter = palavra.charAt(i);
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        token.addListaToken(concat);
+
+        token.addListaToken(new Token(token.getSimbolo(), token.getLexema(), token.getLinha()));
     }
 
     private void trataOperadorRelacional() throws Exception {
@@ -335,8 +340,7 @@ public class Lexico {
             caracter = palavra.charAt(i);
         }
 
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        token.addListaToken(concat);
+        token.addListaToken(new Token(token.getSimbolo(), token.getLexema(), token.getLinha()));
     }
 
     private void trataPontuacao() throws Exception {
@@ -369,8 +373,7 @@ public class Lexico {
         i++;
         caracter = palavra.charAt(i);
 
-        String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-        token.addListaToken(concat);
+        token.addListaToken(new Token(token.getSimbolo(), token.getLexema(), token.getLinha()));
     }
 
     private void trataAtribuicao() {
@@ -388,8 +391,7 @@ public class Lexico {
                 token.setSimbolo("sdoispontos");
             }
             token.setLinha(Integer.toString(linha));
-            String concat = token.getLexema() + " " + token.getSimbolo() + " " + token.getLinha();
-            token.addListaToken(concat);
+            token.addListaToken(new Token(token.getSimbolo(), token.getLexema(), token.getLinha()));
         }
     }
 

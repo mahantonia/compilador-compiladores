@@ -8,4 +8,7 @@ public class Tipo {
     }
 
     public String getTipoValor() { return tipoValor; }
+
+    public void setTipoValor(String tipoValor) { this.tipoValor = tipoValor; }
+
 }

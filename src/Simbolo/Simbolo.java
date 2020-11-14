@@ -1,24 +1,22 @@
 package Simbolo;
 
 import Escopo.Escopo;
-import Memoria.Memoria;
 import Tipo.Tipo;
-import Token.Token;
 
 public class Simbolo {
-    private Token lexema;
+    private String lexema;
     private Escopo escopo;
     private Tipo tipo;
-    private Memoria memoria;
+//    private Memoria memoria;
 
-    public Simbolo(Token lexema, Escopo escopo, Tipo tipo, Memoria memoria) {
+    public Simbolo(String lexema, Escopo escopo, Tipo tipo) {
         this.lexema = lexema;
         this.escopo = escopo;
         this.tipo = tipo;
-        this.memoria = memoria;
+//        this.memoria = memoria;
     }
 
-    public Token getLexema() { return lexema; }
+    public String getLexema() { return lexema; }
 
     public Escopo getEscopo() { return escopo; }
 
@@ -26,5 +24,5 @@ public class Simbolo {
 
     public void setTipo(Tipo tipo) { this.tipo = tipo; }
 
-    public Memoria getMemoria() { return memoria; }
+//    public Memoria getMemoria() { return memoria; }
 }
