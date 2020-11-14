@@ -28,14 +28,16 @@ public class TabelaSimbolo {
         }
     }
 
-    public boolean pesquisaDuplicidadeVariavelTabela(String lexema) {
+    public boolean pesquisaDuplicidadeVariavelTabela(String lexema, Escopo escopo) {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
-           if(tabelaSimbolo.get(i).getLexema().equals(lexema)){
+           if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)){
                if(  tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavel") ||
                     tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro") ||
                     tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean")
                ){
-                   return false;
+                   if(tabelaSimbolo.get(i).getEscopo().getNivel() == escopo.getNivel()) {
+                       return true;
+                   }
                }
            }
         }
@@ -54,11 +56,12 @@ public class TabelaSimbolo {
 
     public boolean pesquisaDeclaracaoVariavelTabela(String lexema) {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
-            if(tabelaSimbolo.get(i).getLexema().equals(lexema)) {
-                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBooleano") ||
-                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro")
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
+                if( tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavel") ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean") ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro")
                 ) {
-                    return true;
+                   return true;
                 }
             }
         }
@@ -67,9 +70,9 @@ public class TabelaSimbolo {
 
     public boolean pesquisaDeclaracaoFuncaoTabela(String lexema) {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
-            if(tabelaSimbolo.get(i).getLexema().equals(lexema)) {
-                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaosBooleano") ||
-                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaosInteiro")
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
+                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
+                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")
                 ) {
                     return true;
                 }
@@ -80,18 +83,18 @@ public class TabelaSimbolo {
 
     public boolean pesquisaDeclaracaoProcedimentoTabela(String lexema) {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
-            if(tabelaSimbolo.get(i).getLexema().equals(lexema)) {
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
                 if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     public boolean pesquisaTabela(String lexema, Escopo escopo) {
         for (int i = 0; i < tabelaSimbolo.size(); i++) {
-            if (tabelaSimbolo.get(i).getLexema().equals(lexema)) {
+            if (tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
                 if (tabelaSimbolo.get(i).getEscopo().getNivel() >= escopo.getNivel()) {
                     return true;
                 } else {
@@ -105,10 +108,11 @@ public class TabelaSimbolo {
     }
 
     public void excluiValorTabela(Escopo escopo) {
-
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
             if(tabelaSimbolo.get(i).getEscopo().getNivel() == escopo.getNivel()) {
-                if(!tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")) {
+                if( !tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento") &&
+                    !tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") &&
+                    !tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")) {
                     tabelaSimbolo.remove(i);
                     i = 0;
                 }
@@ -117,7 +121,9 @@ public class TabelaSimbolo {
 
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
             if(tabelaSimbolo.get(i).getEscopo().getNivel() == escopo.getNivel()+1) {
-                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")) {
+                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento") ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")) {
                     tabelaSimbolo.remove(i);
                     i = 0;
                 }
@@ -127,7 +133,7 @@ public class TabelaSimbolo {
 
     public String pegaTipo(Token token) {
        for(int i = 0; i < tabelaSimbolo.size(); i++) {
-           if(tabelaSimbolo.get(i).getLexema().equals(token.getLexema())) {
+           if(tabelaSimbolo.get(i).getToken().getLexema().equals(token.getLexema())) {
                return tabelaSimbolo.get(i).getTipo().getTipoValor();
            }
        }

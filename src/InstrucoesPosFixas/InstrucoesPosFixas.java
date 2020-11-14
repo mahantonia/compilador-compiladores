@@ -9,27 +9,38 @@ import java.util.Map;
 
 public class InstrucoesPosFixas {
     Map<String, Operador> listaPrioridades = new HashMap<>();
+    List<String> operadoresInteiro =  List.of(  "sinteiro",
+            "variavelInteiro",
+            "funcaoInteiro",
+            "snumero"
+    );
+    List<String> operadoresBoolean =  List.of(  "sbooleano",
+            "variavelBoolean",
+            "funcaoBoolean",
+            "sverdadeiro",
+            "sfalso"
+    );
 
     public InstrucoesPosFixas() {
         criaTabelaPrioridades();
     }
 
     public void criaTabelaPrioridades() {
-        listaPrioridades.put("smenosu", new Operador(6, 1, List.of("sinteiro"), "sinteiro"));
-        listaPrioridades.put( "snao", new Operador(5, 1, List.of("sbooleano"), "sbooleano"));
-        listaPrioridades.put( "smult", new Operador(4, 2, List.of("sinteiro"), "sinteiro"));
-        listaPrioridades.put( "sdiv", new Operador(4, 2, List.of("sinteiro"), "sinteiro"));
-        listaPrioridades.put( "smais", new Operador(3, 2, List.of("sinteiro"), "sinteiro"));
-        listaPrioridades.put( "smenos", new Operador(3, 2, List.of("sinteiro"), "sinteiro"));
-        listaPrioridades.put( "smenor", new Operador(2, 2, List.of("sinteiro"), "sbooleano"));
-        listaPrioridades.put( "smaior", new Operador(2, 2, List.of("sinteiro"), "sbooleano"));
-        listaPrioridades.put( "smaiorig", new Operador(2, 2, List.of("sinteiro"), "sbooleano"));
-        listaPrioridades.put( "smenorig", new Operador(2, 2, List.of("sinteiro"), "sbooleano"));
-        /*Perguntar para a dani se o igual e o diferente sao realmente bool ou podem ser inteiros */
-        listaPrioridades.put( "sig", new Operador(2, 2, List.of("sbooleano", "sinteiro"), "sbooleano"));
-        listaPrioridades.put( "sdif", new Operador(2, 2, List.of("sbooleano", "sinteiro"), "sbooleano"));
-        listaPrioridades.put( "se", new Operador(1, 2, List.of("sbooleano"), "sbooleano"));
-        listaPrioridades.put( "sou", new Operador(0, 2, List.of("sbooleano"), "sbooleano"));
+        listaPrioridades.put("smenosu", new Operador(6, 1, operadoresInteiro, "sinteiro"));
+        listaPrioridades.put( "snao", new Operador(5, 1, operadoresBoolean, "sboolean"));
+        listaPrioridades.put( "smult", new Operador(4, 2, operadoresInteiro, "sinteiro"));
+        listaPrioridades.put( "sdiv", new Operador(4, 2, operadoresInteiro, "sinteiro"));
+        listaPrioridades.put( "smais", new Operador(3, 2, operadoresInteiro, "sinteiro"));
+        listaPrioridades.put( "smenos", new Operador(3, 2, operadoresInteiro, "sinteiro"));
+        listaPrioridades.put( "smenor", new Operador(2, 2, operadoresInteiro, "sboolean"));
+        listaPrioridades.put( "smaior", new Operador(2, 2, operadoresInteiro, "sboolean"));
+        listaPrioridades.put( "smaiorig", new Operador(2, 2, operadoresInteiro, "sboolean"));
+        listaPrioridades.put( "smenorig", new Operador(2, 2, operadoresInteiro, "sboolean"));
+        listaPrioridades.put( "sig", new Operador(2, 2, operadoresInteiro , "sboolean"));
+        listaPrioridades.put( "sdif", new Operador(2, 2,operadoresInteiro, "sboolean"));
+        listaPrioridades.put( "sigB", new Operador(2, 2, operadoresBoolean , "sboolean"));
+        listaPrioridades.put( "sdifB", new Operador(2, 2,operadoresBoolean, "sboolean"));
+        listaPrioridades.put( "se", new Operador(1, 2, operadoresBoolean, "sboolean"));
     }
 
     public int retornaValorPrioridade(String simbolo) {
@@ -51,4 +62,8 @@ public class InstrucoesPosFixas {
     public boolean existeExpressao(String simbolo) {
         return listaPrioridades.containsKey(simbolo);
     }
+
+    public List<String> getOperadoresInteiro() { return operadoresInteiro; }
+
+    public List<String> getOperadoresBoolean() { return operadoresBoolean; }
 }

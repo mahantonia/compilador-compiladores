@@ -228,7 +228,7 @@ public class Lexico {
                 token.setSimbolo("sinteiro");
                 break;
             case "booleano":
-                token.setSimbolo("sbooleano");
+                token.setSimbolo("sboolean");
                 break;
             case "div":
                 token.setSimbolo("sdiv");

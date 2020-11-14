@@ -151,11 +151,11 @@ public class Interface extends JFrame {
     private void populaTabelaToken() {
         modeloTabelaToken.setNumRows(0);
         for(int i = 0 ; i < sintatico.getListaToken().size(); i++){
-            String[] lexSimLin = sintatico.getListaToken().get(i).split(" ");
+//            String[] lexSimLin = sintatico.getListaToken().get(i).split(" ");
 
-            linhaToken[0] = lexSimLin[0];
-            linhaToken[1] = lexSimLin[1];
-            linhaToken[2] = lexSimLin[2];
+            linhaToken[0] = sintatico.getListaToken().get(i).getLexema();
+            linhaToken[1] = sintatico.getListaToken().get(i).getSimbolo();
+            linhaToken[2] = sintatico.getListaToken().get(i).getLinha();
 
             modeloTabelaToken.addRow(linhaToken);
 
