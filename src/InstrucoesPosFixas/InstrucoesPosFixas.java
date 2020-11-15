@@ -14,7 +14,7 @@ public class InstrucoesPosFixas {
             "funcaoInteiro",
             "snumero"
     );
-    List<String> operadoresBoolean =  List.of(  "sbooleano",
+    List<String> operadoresBoolean =  List.of(  "sboolean",
             "variavelBoolean",
             "funcaoBoolean",
             "sverdadeiro",
@@ -41,6 +41,7 @@ public class InstrucoesPosFixas {
         listaPrioridades.put( "sigB", new Operador(2, 2, operadoresBoolean , "sboolean"));
         listaPrioridades.put( "sdifB", new Operador(2, 2,operadoresBoolean, "sboolean"));
         listaPrioridades.put( "se", new Operador(1, 2, operadoresBoolean, "sboolean"));
+        listaPrioridades.put( "sabre_parenteses", new Operador(0, 0, operadoresBoolean, ""));
     }
 
     public int retornaValorPrioridade(String simbolo) {

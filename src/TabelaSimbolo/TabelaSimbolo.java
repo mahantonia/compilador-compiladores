@@ -36,10 +36,21 @@ public class TabelaSimbolo {
                     tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean")
                ){
                    if(tabelaSimbolo.get(i).getEscopo().getNivel() == escopo.getNivel()) {
-                       return true;
+                       return false;
                    }
                }
            }
+        }
+        return true;
+    }
+
+    public boolean pesquisaDuplicidadeProcedimentoTabela(String lexema) {
+        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)){
+                if(  tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")){
+                    return true;
+                }
+            }
         }
         return true;
     }
@@ -85,11 +96,11 @@ public class TabelaSimbolo {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
             if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
                 if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")) {
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public boolean pesquisaTabela(String lexema, Escopo escopo) {

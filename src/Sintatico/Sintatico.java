@@ -55,14 +55,14 @@ public class Sintatico {
                     if(tokenSeparado.getSimbolo().equals("sponto")){
                         System.out.println("Compilado com sucesso =)");
                     } else {
-                        error();
+                        error("espero ponto no final do programa");
                     }
                 } else {
-                    error();
+                    error("esperado ponto e virgula no final");
                 }
             }
         } else {
-            error();
+            error("Programa nao definido");
         }
     }
 
@@ -83,11 +83,11 @@ public class Sintatico {
                     if(tokenSeparado.getSimbolo().equals("sponto_virgula")){
                         tokenSeparado = getToken();
                     } else {
-                        error();
+                        error("esperado ponto e virgula no final");
                     }
                 }
             } else {
-                error();
+                error("esperado variavel");
             }
         }
     }
@@ -109,11 +109,11 @@ public class Sintatico {
                         if(tokenSeparado.getSimbolo().equals("svirgula")) {
                             tokenSeparado = getToken();
                             if(tokenSeparado.getSimbolo().equals("sdoispontos")) {
-                                error();
+                                error("");
                             }
                         }
                     } else {
-                        error();
+                        error("");
                     }
                 } else {
                     /* Erro semantico !!*/
@@ -121,7 +121,7 @@ public class Sintatico {
                     new ErroSematico().printaErro("Erro Semantico - Variavel duplicada ");
                 }
             } else {
-                error();
+                error("esperado ponto e virgula no final");
             }
         }while (!tokenSeparado.getSimbolo().equals("sdoispontos"));
 
@@ -138,7 +138,7 @@ public class Sintatico {
                 semantico.getTabelaSimbolo().atriuirTipoVariaveis(escopo, new Tipo("variavelBoolean"));
                 tokenSeparado = getToken();
             } else {
-                error();
+                error("esperado ponto e virgula no final");
             }
         }
     }
@@ -157,7 +157,7 @@ public class Sintatico {
                 if(tokenSeparado.getSimbolo().equals("sponto_virgula")) {
                     tokenSeparado = getToken();
                 } else {
-                    error();
+                    error("esperado ponto e virgula no final");
                 }
 
                 if(flag == 1) {
@@ -172,7 +172,7 @@ public class Sintatico {
         escopo.adicionarNivel();
 
         if(tokenSeparado.getSimbolo().equals("sidentificador")) {
-            if(semantico.getTabelaSimbolo().pesquisaDeclaracaoProcedimentoTabela(tokenSeparado.getLexema())) {
+            if(semantico.getTabelaSimbolo().pesquisaDuplicidadeProcedimentoTabela(tokenSeparado.getLexema())) {
                 semantico.getTabelaSimbolo().insereTabela(
                         new Simbolo(
                             tokenSeparado,
@@ -185,15 +185,13 @@ public class Sintatico {
                 if(tokenSeparado.getSimbolo().equals("sponto_virgula")) {
                     analisaBloco();
                 } else {
-                    error();
+                    error("esperado ponto e virgula no final");
                 }
             } else {
-                /* Erro Semantico */
-//                System.out.println("Erro Semantico - procedimento nao declarado ou fora do nivel de alcance");
                 new ErroSematico().printaErro("Erro Semantico - procedimento nao declarado ou fora do nivel de alcance");
             }
         } else {
-            error();
+            error("esperado ponto e virgula no final");
         }
 
         semantico.getTabelaSimbolo().excluiValorTabela(escopo);
@@ -228,7 +226,7 @@ public class Sintatico {
                         );
 
                     } else {
-                        error();
+                        error("BLA4");
                     }
 
                     tokenSeparado = getToken();
@@ -237,7 +235,7 @@ public class Sintatico {
                         analisaBloco();
                     }
                 } else {
-                    error();
+                    error("BLA3");
                 }
             } else {
                 /* Erro Sematico */
@@ -245,7 +243,7 @@ public class Sintatico {
                 new ErroSematico().printaErro("Erro Semantico - nao existe ou nao esta visivel o nome da funcao");
             }
         } else {
-            error();
+            error("BLA2");
         }
 
         semantico.getTabelaSimbolo().excluiValorTabela(escopo);
@@ -263,12 +261,12 @@ public class Sintatico {
                             analisaComandoSimples();
                         }
                     } else {
-                        error();
+                        error("esperado ponto e virgula no final");
                     }
                 }
                 tokenSeparado = getToken();
         } else {
-            error();
+            error("BLA");
         }
     }
 
@@ -325,6 +323,10 @@ public class Sintatico {
                 tipoVariavelAtribuicao = "sboolean";
             }
 
+            if(tipoExpressao.getTipo().getTipoValor().equals("sinteiro")) {
+                tipoExpressao.getTipo().setTipoValor("snumero");
+            }
+
             if(!tipoExpressao.getTipo().getTipoValor().equals(tipoVariavelAtribuicao)) {
                 /* Erro semantico - tipos diferentes atribuicao */
 //                System.out.println("Erro Semantico");
@@ -367,8 +369,6 @@ public class Sintatico {
         tipoExpressao = semantico.getPosFixa().pegaTipoExpressao();
 
         if(!tipoExpressao.getTipo().getTipoValor().equals("sboolean")) {
-            /* Erro semantico - tipos diferentes atribuicao */
-//            System.out.println("Erro Semantico");
             new ErroSematico().printaErro("Erro Semantico - tipos diferentes");
         } else {
             if(tokenSeparado.getSimbolo().equals("sentao")) {
@@ -380,7 +380,7 @@ public class Sintatico {
                     analisaComandoSimples();
                 }
             } else {
-                error();
+                error("esperado ponto e virgula no final");
             }
         }
     }
@@ -466,14 +466,14 @@ public class Sintatico {
                             semantico.getPosFixa().adiconarPosFixa(tokenSeparado);
                             tokenSeparado = getToken();
                         } else {
-                            error();
+                            error("esperado ponto e virgula no final");
                         }
                     } else {
                         if((tokenSeparado.getSimbolo().equals("sverdadeiro")) || (tokenSeparado.getSimbolo().equals("sfalso"))) {
                             semantico.getPosFixa().adiconarPosFixa(tokenSeparado);
                             tokenSeparado = getToken();
                         } else {
-                            error();
+                            error("esperado ponto e virgula no final");
                         }
                     }
                 }
@@ -486,7 +486,7 @@ public class Sintatico {
             semantico.getTabelaSimbolo().pesquisaDeclaracaoFuncaoTabela(tokenSeparado.getLexema());
 
         } else {
-            error();
+            error("esperado ponto e virgula no final");
         }
 
         tokenSeparado = getToken();
@@ -501,21 +501,13 @@ public class Sintatico {
         tipoExpressao = semantico.getPosFixa().pegaTipoExpressao();
 
         if(!tipoExpressao.getTipo().getTipoValor().equals("sboolean")) {
-            /* Erro semantico - tipos diferentes atribuicao */
-//            System.out.println("Erro Semantico");
             new ErroSematico().printaErro("Erro Semantico !");
         } else {
-            if(tipoVariavelAtribuicao.equals("sboolean")) {
-                if(tokenSeparado.getSimbolo().equals("sfaca")) {
-                    tokenSeparado = getToken();
-                    analisaComandoSimples();
-                } else {
-                    error();
-                }
+            if(tokenSeparado.getSimbolo().equals("sfaca")) {
+                tokenSeparado = getToken();
+                analisaComandoSimples();
             } else {
-                /* Erro semantico - tipo nao permitido */
-//                System.out.println("Erro semantico - tipo de variavel esta errado");
-                new ErroSematico().printaErro("Erro semantico - tipo de variavel esta errado");
+                error("esperado ponto e virgula no final");
             }
         }
     }
@@ -536,13 +528,13 @@ public class Sintatico {
                 if(tokenSeparado.getSimbolo().equals("sfecha_parenteses")) {
                     tokenSeparado = getToken();
                 } else {
-                    error();
+                    error("esperado ponto e virgula no final");
                 }
             } else {
-                error();
+                error("esperado ponto e virgula no final");
             }
         } else {
-            error();
+            error("esperado ponto e virgula no final");
         }
     }
 
@@ -558,7 +550,7 @@ public class Sintatico {
                     if(tokenSeparado.getSimbolo().equals("sfecha_parenteses")) {
                         tokenSeparado = getToken();
                     } else {
-                        error();
+                        error("esperado ponto e virgula no final");
                     }
                 } else {
                     /* Erro semantico */
@@ -566,14 +558,14 @@ public class Sintatico {
                     new ErroSematico().printaErro("Erro semantico - variavel nao declarada no escopo ou fora de alcance q");
                 }
             } else {
-                error();
+                error("esperado ponto e virgula no final");
             }
         } else {
-            error();
+            error("esperado ponto e virgula no final");
         }
     }
 
-    private void error() throws Exception {
+    private void error(String s) throws Exception {
         new ErroSintatico().printaErro(Integer.parseInt(tokenSeparado.getLinha()));
     }
 

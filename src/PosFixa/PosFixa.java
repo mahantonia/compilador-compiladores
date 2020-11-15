@@ -45,6 +45,7 @@ public class PosFixa {
                         removeTopoPilha();
                     } else {
                         removeTopoPilha();
+                        break;
                     }
                 }
             } else {
@@ -69,6 +70,7 @@ public class PosFixa {
                                         break;
                                     }
                                 }
+                                pilha.add(token);
                             } else {
                                 expressaoFinalPosFixa.add(token);
                             }
@@ -155,6 +157,8 @@ public class PosFixa {
                     }
 
                     tokenAuxiliar.getTipo().setTipoValor(instrucoesPosFixas.retornaTipoSimboloResultante(expressaoFinalPosFixa.get(i).getSimbolo()));
+
+                    expressaoFinalPosFixa.get(i).setSimbolo(tokenAuxiliar.getTipo().getTipoValor());
                 } else {
                     i++;
                 }
