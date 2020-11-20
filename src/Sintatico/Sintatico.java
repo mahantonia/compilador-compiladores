@@ -327,6 +327,13 @@ public class Sintatico {
                 tipoExpressao.getTipo().setTipoValor("snumero");
             }
 
+            if( tipoExpressao.getTipo().getTipoValor().equals("sverdadeiro") ||
+                tipoExpressao.getTipo().getTipoValor().equals("sfalso") ||
+                tipoExpressao.getTipo().getTipoValor().equals("variavelBoolean") ||
+                tipoExpressao.getTipo().getTipoValor().equals("funcaoBoolean")) {
+                tipoExpressao.getTipo().setTipoValor("sboolean");
+            }
+
             if(!tipoExpressao.getTipo().getTipoValor().equals(tipoVariavelAtribuicao)) {
                 /* Erro semantico - tipos diferentes atribuicao */
 //                System.out.println("Erro Semantico");
@@ -368,8 +375,15 @@ public class Sintatico {
 
         tipoExpressao = semantico.getPosFixa().pegaTipoExpressao();
 
+        if(tipoExpressao.getTipo().getTipoValor().equals("variavelBoolean") ||
+            tipoExpressao.getTipo().getTipoValor().equals("funcaoBoolean") ||
+            tipoExpressao.getTipo().getTipoValor().equals("sfalso") ||
+            tipoExpressao.getTipo().getTipoValor().equals("sverdadeiro")) {
+            tipoExpressao.getTipo().setTipoValor("sboolean");
+        }
+
         if(!tipoExpressao.getTipo().getTipoValor().equals("sboolean")) {
-            new ErroSematico().printaErro("Erro Semantico - tipos diferentes");
+            new ErroSematico().printaErro("Erro Semantico - expressao nao retorna booleano");
         } else {
             if(tokenSeparado.getSimbolo().equals("sentao")) {
                 tokenSeparado = getToken();

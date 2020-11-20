@@ -247,6 +247,7 @@ public class Lexico {
                 break;
             case "falso":
                 token.setSimbolo("sfalso");
+                break;
             default:
                 token.setSimbolo("sidentificador");
                 break;
