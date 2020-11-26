@@ -21,7 +21,6 @@ public class Sintatico {
     private Semantico semantico;
     private Escopo escopo;
     private Simbolo tipoExpressao;
-    private String tipoVariavelAtribuicao;
 
     public void start(String conteudo) throws Exception {
         token = new Token();
@@ -211,22 +210,21 @@ public class Sintatico {
                     tokenSeparado = getToken();
 
                     if(tokenSeparado.getSimbolo().equals("sinteiro")) {
-                        new Simbolo(
+                        semantico.getTabelaSimbolo().insereTabela (new Simbolo(
                                 lexemaAntigo,
                                 new Escopo(escopo.getNivel()),
                                 new Tipo("funcaoInteiro")
-                        );
-                    }
-
-                    if (tokenSeparado.getSimbolo().equals("sboolean")) {
-                        new Simbolo(
-                                lexemaAntigo,
-                                new Escopo(escopo.getNivel()),
-                                new Tipo("funcaoBoolean")
-                        );
-
+                        ));
                     } else {
-                        error("BLA4");
+                        if (tokenSeparado.getSimbolo().equals("sboolean")) {
+                            semantico.getTabelaSimbolo().insereTabela(new Simbolo(
+                                    lexemaAntigo,
+                                    new Escopo(escopo.getNivel()),
+                                    new Tipo("funcaoBoolean")
+                            ));
+                        } else {
+                            error("BLA4");
+                        }
                     }
 
                     tokenSeparado = getToken();
@@ -306,6 +304,8 @@ public class Sintatico {
     }
 
     private void analisaAtribuicao(Token lexemaAntigo) throws Exception {
+        String tipoVariavelAtribuicao;
+
         if(semantico.getTabelaSimbolo().pesquisaDeclaracaoVariavelTabela(lexemaAntigo.getLexema())) {
             tokenSeparado = getToken();
 
@@ -323,7 +323,9 @@ public class Sintatico {
                 tipoVariavelAtribuicao = "sboolean";
             }
 
-            if(tipoExpressao.getTipo().getTipoValor().equals("sinteiro")) {
+            if( tipoExpressao.getTipo().getTipoValor().equals("sinteiro") ||
+                tipoExpressao.getTipo().getTipoValor().equals("variavelInteiro") ||
+                tipoExpressao.getTipo().getTipoValor().equals("funcaoInteiro")) {
                 tipoExpressao.getTipo().setTipoValor("snumero");
             }
 
@@ -336,11 +338,10 @@ public class Sintatico {
 
             if(!tipoExpressao.getTipo().getTipoValor().equals(tipoVariavelAtribuicao)) {
                 /* Erro semantico - tipos diferentes atribuicao */
-//                System.out.println("Erro Semantico");
                 new ErroSematico().printaErro("Erro Semantico - tipos diferentes");
             }
         } else {
-            if(semantico.getTabelaSimbolo().pesquisaDeclaracaoFuncaoTabela(lexemaAntigo.getLexema())) {
+            if(!semantico.getTabelaSimbolo().pesquisaDeclaracaoFuncaoTabela(lexemaAntigo.getLexema())) {
                 tokenSeparado = getToken();
 
                 semantico.getPosFixa().limparPosFixa();
@@ -349,9 +350,28 @@ public class Sintatico {
 
                 tipoVariavelAtribuicao = semantico.getTabelaSimbolo().pegaTipo(lexemaAntigo);
 
-                if(!tipoExpressao.equals(tipoVariavelAtribuicao)) {
-                    /* Erro semantico - tipos diferentes atribuicao */
-//                    System.out.println("Erro Semantico");
+                if(tipoVariavelAtribuicao.equals("variavelInteiro") || tipoVariavelAtribuicao.equals("funcaoInteiro")) {
+                    tipoVariavelAtribuicao = "snumero";
+                }
+
+                if(tipoVariavelAtribuicao.equals("variavelBoolean") || tipoVariavelAtribuicao.equals("funcaoBoolean")) {
+                    tipoVariavelAtribuicao = "sboolean";
+                }
+
+                if( tipoExpressao.getTipo().getTipoValor().equals("sinteiro") ||
+                    tipoExpressao.getTipo().getTipoValor().equals("variavelInteiro") ||
+                    tipoExpressao.getTipo().getTipoValor().equals("funcaoInteiro")) {
+                    tipoExpressao.getTipo().setTipoValor("snumero");
+                }
+
+                if( tipoExpressao.getTipo().getTipoValor().equals("sverdadeiro") ||
+                        tipoExpressao.getTipo().getTipoValor().equals("sfalso") ||
+                        tipoExpressao.getTipo().getTipoValor().equals("variavelBoolean") ||
+                        tipoExpressao.getTipo().getTipoValor().equals("funcaoBoolean")) {
+                    tipoExpressao.getTipo().setTipoValor("sboolean");
+                }
+
+                if(!tipoExpressao.getTipo().getTipoValor().equals(tipoVariavelAtribuicao)) {
                     new ErroSematico().printaErro("Erro Semantico - tipos diferentes");
                 }
             }
@@ -533,7 +553,7 @@ public class Sintatico {
             tokenSeparado = getToken();
 
             if(tokenSeparado.getSimbolo().equals("sidentificador")) {
-                if(semantico.getTabelaSimbolo().pesquisaDeclaracaoVariavelTabela(tokenSeparado.getLexema())) {
+                if(semantico.getTabelaSimbolo().pesquisaDeclaracaoVariavelFuncao(tokenSeparado.getLexema())) {
                     tokenSeparado = getToken();
                 } else {
 //                    System.out.println("ERROR Semantico !!");
@@ -558,7 +578,7 @@ public class Sintatico {
         if(tokenSeparado.getSimbolo().equals("sabre_parenteses")) {
                 tokenSeparado = getToken();
             if(tokenSeparado.getSimbolo().equals("sidentificador")) {
-                if(semantico.getTabelaSimbolo().pesquisaDeclaracaoVariavelTabela(tokenSeparado.getLexema())) {
+                if(semantico.getTabelaSimbolo().pesquisaDeclaracaoVariavelFuncao(tokenSeparado.getLexema())) {
                     tokenSeparado = getToken();
 
                     if(tokenSeparado.getSimbolo().equals("sfecha_parenteses")) {
@@ -568,7 +588,6 @@ public class Sintatico {
                     }
                 } else {
                     /* Erro semantico */
-//                    System.out.println("Erro Semantico - variavel nao declarada no escopo ou fora de alcance");
                     new ErroSematico().printaErro("Erro semantico - variavel nao declarada no escopo ou fora de alcance q");
                 }
             } else {

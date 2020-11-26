@@ -79,10 +79,13 @@ public class TabelaSimbolo {
         return false;
     }
 
-    public boolean pesquisaDeclaracaoFuncaoTabela(String lexema) {
+    public boolean pesquisaDeclaracaoVariavelFuncao(String lexema) {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
             if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
-                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
+                if( tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavel") ||
+                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean") ||
+                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro") ||
+                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
                         tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")
                 ) {
                     return true;
@@ -90,6 +93,19 @@ public class TabelaSimbolo {
             }
         }
         return false;
+    }
+
+    public boolean pesquisaDeclaracaoFuncaoTabela(String lexema) {
+        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
+                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
+                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")
+                ) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public boolean pesquisaDeclaracaoProcedimentoTabela(String lexema) {
