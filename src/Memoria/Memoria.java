@@ -1,9 +1,13 @@
 package Memoria;
 
 public class Memoria {
-    private String memoriaValor;
+    private int memoriaValor;
 
-    public Memoria(String memoriaValor) {
+    public Memoria(int memoriaValor) {
         this.memoriaValor = memoriaValor;
     }
+
+    public Memoria() { }
+
+    public int getMemoriaValor() { return memoriaValor; }
 }

@@ -167,4 +167,48 @@ public class TabelaSimbolo {
 
        return "LANCAR EXCECAO !!!!!" ;
     }
+
+    public int retornaPosicaoTabelaSimbolo(String lexema) {
+        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public int retornaPosicaoRotulo(String lexema) {
+        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
+                return tabelaSimbolo.get(i).getMemoria().getMemoriaValor();
+            }
+        }
+
+        return -1;
+    }
+
+    public int getNumeroVariaveisAlocadas(Escopo escopo) {
+        int quantidadeVariaveis = 0;
+        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+            if(tabelaSimbolo.get(i).getEscopo().equals(escopo)) {
+                if((tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro")) ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean")) {
+                    quantidadeVariaveis++;
+                }
+            }
+        }
+        return quantidadeVariaveis;
+    }
+
+    public int getNumeroVariaveisAlocadasTotal() {
+        int quantidadeVariaveis = 0;
+        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+            if((tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro")) ||
+                tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean")) {
+                quantidadeVariaveis++;
+            }
+        }
+        return quantidadeVariaveis;
+    }
 }

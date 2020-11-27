@@ -1,6 +1,7 @@
 package Simbolo;
 
 import Escopo.Escopo;
+import Memoria.Memoria;
 import Tipo.Tipo;
 import Token.Token;
 
@@ -8,13 +9,13 @@ public class Simbolo {
     private Token token;
     private Escopo escopo;
     private Tipo tipo;
-//    private Memoria memoria;
+    private Memoria memoria;
 
-    public Simbolo(Token token, Escopo escopo, Tipo tipo) {
+    public Simbolo(Token token, Escopo escopo, Tipo tipo, Memoria memoria) {
         this.token = token;
         this.escopo = escopo;
         this.tipo = tipo;
-//        this.memoria = memoria;
+        this.memoria = memoria;
     }
 
     public Simbolo() {
@@ -30,5 +31,5 @@ public class Simbolo {
 
     public Escopo getEscopo() { return escopo; }
 
-//    public Memoria getMemoria() { return memoria; }
+    public Memoria getMemoria() { return memoria; }
 }

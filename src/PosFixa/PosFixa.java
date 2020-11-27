@@ -1,6 +1,7 @@
 package PosFixa;
 
 import ErroSemantico.ErroSematico;
+import GeracaoCodigo.GeracaoCodigo;
 import InstrucoesPosFixas.InstrucoesPosFixas;
 import Simbolo.Simbolo;
 import TabelaSimbolo.TabelaSimbolo;
@@ -14,12 +15,14 @@ public class PosFixa {
     ArrayList<Token> expressaoFinalPosFixa;
     InstrucoesPosFixas instrucoesPosFixas;
     TabelaSimbolo tabelaSimbolo;
+    GeracaoCodigo geracaoCodigo;
 
-    public PosFixa(TabelaSimbolo tabelaSimbolo) {
+    public PosFixa(TabelaSimbolo tabelaSimbolo, GeracaoCodigo geracaoCodigo) {
         pilha = new ArrayList<>();
         expressaoFinalPosFixa = new ArrayList<>();
         instrucoesPosFixas = new InstrucoesPosFixas();
         this.tabelaSimbolo = tabelaSimbolo;
+        this.geracaoCodigo = geracaoCodigo;
     }
 
     public Token getTopoPilha() {
@@ -104,6 +107,7 @@ public class PosFixa {
         List<String> tiposRequeritos;
 
         getPosFixa();
+        geraCodigoPosFixa(expressaoFinalPosFixa);
 
         if(expressaoFinalPosFixa.size() == 1) {
             tokenAuxiliar.getToken().setSimbolo(expressaoFinalPosFixa.get(0).getSimbolo());
@@ -166,5 +170,81 @@ public class PosFixa {
         }
 
         return tokenAuxiliar;
+    }
+
+    public void geraCodigoPosFixa(ArrayList<Token> token) {
+        for(int i = 0; i < token.size(); i++) {
+            identificaSimboloPosFixa(token.get(i).getSimbolo(), token.get(i).getLexema(), token.get(i).getSimbolo());
+        }
+    }
+
+    private void identificaSimboloPosFixa(String simbolo, String lexema, String s) {
+        switch (simbolo) {
+            case "sidentificador":
+                if(tabelaSimbolo.pesquisaDeclaracaoVariavelTabela(lexema)) {
+                    int posicao = tabelaSimbolo.retornaPosicaoRotulo(lexema);
+                    if(posicao != -1) {
+                        geracaoCodigo.LDV(posicao);
+                    }
+                }
+                break;
+            case "snumero":
+                    geracaoCodigo.LDC(lexema);
+                break;
+            case "sverdadeiro":
+                    geracaoCodigo.LDC("1");
+                break;
+            case "sfalso":
+                    geracaoCodigo.LDC("0");
+                break;
+            case "smenosu":
+                    geracaoCodigo.INV();
+                break;
+            case "smais":
+                    geracaoCodigo.ADD();
+                break;
+            case "smenos":
+                    geracaoCodigo.SUB();
+                break;
+            case "smult":
+                    geracaoCodigo.MULT();
+                break;
+            case "sdiv":
+                    geracaoCodigo.DIVI();
+                break;
+            case "smenor":
+                    geracaoCodigo.CME();
+                break;
+            case "smaior":
+                geracaoCodigo.CMA();
+                break;
+            case "smaiorig":
+                    geracaoCodigo.CMAQ();
+                break;
+            case "smenorig":
+                    geracaoCodigo.CMEQ();
+                break;
+            case "sig":
+                    geracaoCodigo.CEQ();
+                break;
+            case "sdif":
+                    geracaoCodigo.CDIF();
+                break;
+            case "sigB":
+                    geracaoCodigo.CEQ();
+                break;
+            case "sdifB":
+                    geracaoCodigo.CDIF();
+                break;
+            case "snao":
+                    geracaoCodigo.NEG();
+                break;
+            case "se":
+                    geracaoCodigo.AND();
+                break;
+            case "sou":
+                    geracaoCodigo.OR();
+                break;
+        }
     }
 }
