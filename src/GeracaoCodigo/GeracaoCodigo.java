@@ -133,6 +133,10 @@ public class GeracaoCodigo {
         escreveArquivo("JMP" + " " + valor);
     }
 
+    public void JMPF(int valor) {
+        escreveArquivo("JMPF" + " " + valor);
+    }
+
     public void DALLOC(int m, int n) {
         escreveArquivo("DALLOC" + " " + m + " " + n);
     }

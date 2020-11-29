@@ -47,22 +47,12 @@ public class TabelaSimbolo {
     public boolean pesquisaDuplicidadeProcedimentoTabela(String lexema) {
         for(int i = 0; i < tabelaSimbolo.size(); i++) {
             if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)){
-                if(  tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")){
-                    return true;
+                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento")){
+                    return false;
                 }
             }
         }
         return true;
-    }
-
-    public void colocaTipoTabela(Escopo nivel, Tipo tipo) {
-        for(int i = 0; i <tabelaSimbolo.size(); i++) {
-            if(tabelaSimbolo.get(i).getEscopo().equals(nivel)) {
-                if(tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavel")) {
-                    tabelaSimbolo.get(i).setTipo(tipo);
-                }
-            }
-        }
     }
 
     public boolean pesquisaDeclaracaoVariavelTabela(String lexema) {
@@ -73,22 +63,6 @@ public class TabelaSimbolo {
                     tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro")
                 ) {
                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean pesquisaDeclaracaoVariavelFuncao(String lexema) {
-        for(int i = 0; i < tabelaSimbolo.size(); i++) {
-            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
-                if( tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavel") ||
-                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelBoolean") ||
-                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("variavelInteiro") ||
-                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
-                        tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")
-                ) {
-                    return true;
                 }
             }
         }
@@ -168,18 +142,8 @@ public class TabelaSimbolo {
        return "LANCAR EXCECAO !!!!!" ;
     }
 
-    public int retornaPosicaoTabelaSimbolo(String lexema) {
-        for(int i = 0; i < tabelaSimbolo.size(); i++) {
-            if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
     public int retornaPosicaoRotulo(String lexema) {
-        for(int i = 0; i < tabelaSimbolo.size(); i++) {
+        for(int i = tabelaSimbolo.size() - 1; i > 0; i--) {
             if(tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
                 return tabelaSimbolo.get(i).getMemoria().getMemoriaValor();
             }
