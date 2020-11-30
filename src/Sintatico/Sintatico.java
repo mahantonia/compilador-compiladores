@@ -66,6 +66,7 @@ public class Sintatico {
 
                 /*Inicio Geracao de Codigo */
                 geracaoCodigo.START();
+                geracaoCodigo.ALLOC(0, 1);
                 /*Fim Geracao de Codigo */
 
                 tokenSeparado = getToken();
@@ -78,6 +79,7 @@ public class Sintatico {
                             geracaoCodigo.DALLOC(totalVariaveisFuncoes, totalVariaveis);
                         }
 
+                        geracaoCodigo.DALLOC(0 , 1);
                         geracaoCodigo.HLT();
                         /*Fim Geracao de Codigo */
                     } else {
@@ -243,7 +245,7 @@ public class Sintatico {
 
                     /* Inicia Geracao Codigo */
                     int variaveis = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadas(escopo);
-                    int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis;
+                    int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis + 1;
 
                     if(variaveis > 0) {
                         geracaoCodigo.DALLOC(offset, variaveis);
@@ -488,7 +490,7 @@ public class Sintatico {
                 geracaoCodigo.ArmazenaRetornoFuncao();
 
                 int variaveis = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadas(escopo);
-                int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis;
+                int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis + 1;
 
                 if(variaveis > 0) {
                     geracaoCodigo.DALLOC(offset, variaveis);
