@@ -40,7 +40,7 @@ public class Sintatico {
         escopo = new Escopo(0);
         index = 0;
         rotulo = 1;
-        quantidadeVariaveis = 0;
+        quantidadeVariaveis = 1;
         verificaPrimeiraExecucao = true;
         analisaSintatico();
     }
@@ -105,7 +105,7 @@ public class Sintatico {
 
     private void geraCodigoVariaveis() {
         int variaveis = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadas(escopo);
-        int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis;
+        int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis + 1;
 
         if(verificaPrimeiraExecucao) {
             totalVariaveis = variaveis;
@@ -484,14 +484,19 @@ public class Sintatico {
                     verificaRetornoFuncao = true;
                 }
 
-                /* Inicio Geracao Codigo */
+                /* Inicia Geracao Codigo */
+                geracaoCodigo.ArmazenaRetornoFuncao();
+
                 int variaveis = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadas(escopo);
                 int offset = semantico.getTabelaSimbolo().getNumeroVariaveisAlocadasTotal() - variaveis;
 
-                geracaoCodigo.RETURNF(offset, variaveis);
-
+                if(variaveis > 0) {
+                    geracaoCodigo.DALLOC(offset, variaveis);
+                }
+                geracaoCodigo.RETURN();
                 quantidadeVariaveis -= variaveis;
-                /*Fim Geracao Codigo */
+
+//                /* Fim Geracao Codigo */
             } else {
                 new ErroSematico().printaErro("Erro Semantico - Variavel ou funcao nao declarados");
             }
@@ -669,6 +674,7 @@ public class Sintatico {
 
             if(posicao != -1) {
                 geracaoCodigo.CALL(posicao);
+                geracaoCodigo.RetornaValorFuncao();
             }
             /*FIM Geracao de Codigo */
         } else {
@@ -773,6 +779,7 @@ public class Sintatico {
 
                         if(posicao != -1) {
                             geracaoCodigo.CALL(posicao);
+                            geracaoCodigo.RetornaValorFuncao();
                         }
 
                         /* Fim Gera Codigo */

@@ -109,6 +109,14 @@ public class GeracaoCodigo {
         escreveArquivo("RETURN");
     }
 
+    public void ArmazenaRetornoFuncao() {
+        escreveArquivo("STR" + " " + 0 );
+    }
+
+    public void RetornaValorFuncao() {
+        escreveArquivo("LDV" +  " " + 0);
+    }
+
     public void LDC(String valor) {
         escreveArquivo("LDC" + " " + valor);
     }
@@ -143,9 +151,5 @@ public class GeracaoCodigo {
 
     public void ALLOC(int m, int n) {
         escreveArquivo("ALLOC" + " " + m + " " + n);
-    }
-
-    public void RETURNF(int m, int n) {
-        escreveArquivo("RETURNF" + " " + m + " " + n);
     }
 }
