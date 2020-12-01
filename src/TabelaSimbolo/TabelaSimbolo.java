@@ -93,14 +93,39 @@ public class TabelaSimbolo {
         return false;
     }
 
+//    public boolean pesquisaTabela(String lexema, Escopo escopo) {
+//        for (int i = 0; i < tabelaSimbolo.size(); i++) {
+//            if (tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
+//                if (tabelaSimbolo.get(i).getEscopo().getNivel() >= escopo.getNivel()) {
+//                    return true;
+//                } else {
+//                    if (tabelaSimbolo.get(i).getEscopo().getNivel() == 0) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
+
     public boolean pesquisaTabela(String lexema, Escopo escopo) {
         for (int i = 0; i < tabelaSimbolo.size(); i++) {
             if (tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
-                if (tabelaSimbolo.get(i).getEscopo().getNivel() >= escopo.getNivel()) {
-                    return true;
-                } else {
-                    if (tabelaSimbolo.get(i).getEscopo().getNivel() == 0) {
+                if( tabelaSimbolo.get(i).getTipo().getTipoValor().equals("procedimento") ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoBoolean") ||
+                    tabelaSimbolo.get(i).getTipo().getTipoValor().equals("funcaoInteiro")
+                ){
+                    if( tabelaSimbolo.get(i).getEscopo().getNivel() <= escopo.getNivel() ||
+                        tabelaSimbolo.get(i).getEscopo().getNivel() == escopo.getNivel() + 1) {
                         return true;
+                    }
+                } else {
+                    if (tabelaSimbolo.get(i).getEscopo().getNivel() <= escopo.getNivel()) {
+                        return true;
+                    } else {
+                        if (tabelaSimbolo.get(i).getEscopo().getNivel() == 0) {
+                            return true;
+                        }
                     }
                 }
             }

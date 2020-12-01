@@ -156,7 +156,7 @@ public class PosFixa {
                         }
 
                         if(!tipoCorreto) {
-                            new ErroSematico().printaErro("Erro Semantico - variaveis ou funcoes com tipos diferentes");
+                            new ErroSematico().printaErro("Erro Semantico - variaveis ou funcoes com tipos diferentes", Integer.parseInt(expressaoFinalPosFixa.get(i).getLinha()));
                         }
                     }
 

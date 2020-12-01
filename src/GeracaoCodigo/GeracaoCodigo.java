@@ -14,7 +14,7 @@ public class GeracaoCodigo {
 
     public void criaArquivo() {
         try {
-            arquivo = Paths.get("C:\\Users\\maanf\\OneDrive\\Documentos\\Codigo Gerado\\CodigoGerado.obj");
+            arquivo = Paths.get("C:\\Users\\maanf\\OneDrive\\Documentos\\Codigo Gerado\\CodigoGerado.txt");
             Files.write(arquivo, "".getBytes());
         } catch (IOException e) {
             e.printStackTrace();
