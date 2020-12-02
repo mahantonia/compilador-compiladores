@@ -173,9 +173,12 @@ public class PosFixa {
     }
 
     public void geraCodigoPosFixa(ArrayList<Token> token) {
+        System.out.println("Inicio - Pos fixa");
         for(int i = 0; i < token.size(); i++) {
+            System.out.println(token.get(i).getLexema());
             identificaSimboloPosFixa(token.get(i).getSimbolo(), token.get(i).getLexema());
         }
+        System.out.println("Fim - Pos Fixa");
     }
 
     private void identificaSimboloPosFixa(String simbolo, String lexema) {
