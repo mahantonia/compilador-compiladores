@@ -93,21 +93,6 @@ public class TabelaSimbolo {
         return false;
     }
 
-//    public boolean pesquisaTabela(String lexema, Escopo escopo) {
-//        for (int i = 0; i < tabelaSimbolo.size(); i++) {
-//            if (tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {
-//                if (tabelaSimbolo.get(i).getEscopo().getNivel() >= escopo.getNivel()) {
-//                    return true;
-//                } else {
-//                    if (tabelaSimbolo.get(i).getEscopo().getNivel() == 0) {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
     public boolean pesquisaTabela(String lexema, Escopo escopo) {
         for (int i = 0; i < tabelaSimbolo.size(); i++) {
             if (tabelaSimbolo.get(i).getToken().getLexema().equals(lexema)) {

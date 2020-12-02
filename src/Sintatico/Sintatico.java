@@ -36,6 +36,7 @@ public class Sintatico {
     private boolean retornoEntao;
     private boolean retornoSenao;
     private boolean verificaEncadeamentoSe;
+    private boolean funcaoDentroAnalisaExpressao;
 
     public void start(String conteudo) throws Exception {
         token = new Token();
@@ -54,6 +55,7 @@ public class Sintatico {
         retornoEntao = false;
         retornoSenao = false;
         verificaEncadeamentoSe = false;
+        funcaoDentroAnalisaExpressao = false;
         analisaSintatico();
     }
 
@@ -601,6 +603,7 @@ public class Sintatico {
     }
 
     private void analisaExpressao() throws Exception {
+        funcaoDentroAnalisaExpressao = true;
         analisaExpressaoSimples();
 
         if(tokenSeparado.getSimbolo().equals("smaior")
@@ -658,7 +661,6 @@ public class Sintatico {
             } else {
                 errorSemantico("Erro Semantico -  nome de variavel fora do escopo ou nao declarada");
             }
-
         } else {
             if(tokenSeparado.getSimbolo().equals("snumero")) {
                 semantico.getPosFixa().adiconarPosFixa(tokenSeparado);
@@ -696,16 +698,7 @@ public class Sintatico {
 
     private void analisaChamadaFuncao() throws Exception {
         if(tokenSeparado.getSimbolo().equals("sidentificador")) {
-            if(!semantico.getTabelaSimbolo().pesquisaDeclaracaoFuncaoTabela(tokenSeparado.getLexema())) {
-                /* Inicio Geracao de codigo */
-                int posicao = semantico.getTabelaSimbolo().retornaPosicaoRotulo(lexemaAntigo.getLexema());
-
-                if(posicao != -1) {
-                    geracaoCodigo.CALL(posicao);
-                    geracaoCodigo.RetornaValorFuncao();
-                }
-                /*FIM Geracao de Codigo */
-            } else {
+            if(semantico.getTabelaSimbolo().pesquisaDeclaracaoFuncaoTabela(tokenSeparado.getLexema())) {
                 errorSemantico("Erro Semantico - funcao nao declarada ");
             }
         } else {

@@ -174,17 +174,26 @@ public class PosFixa {
 
     public void geraCodigoPosFixa(ArrayList<Token> token) {
         for(int i = 0; i < token.size(); i++) {
-            identificaSimboloPosFixa(token.get(i).getSimbolo(), token.get(i).getLexema(), token.get(i).getSimbolo());
+            identificaSimboloPosFixa(token.get(i).getSimbolo(), token.get(i).getLexema());
         }
     }
 
-    private void identificaSimboloPosFixa(String simbolo, String lexema, String s) {
+    private void identificaSimboloPosFixa(String simbolo, String lexema) {
         switch (simbolo) {
             case "sidentificador":
                 if(tabelaSimbolo.pesquisaDeclaracaoVariavelTabela(lexema)) {
                     int posicao = tabelaSimbolo.retornaPosicaoRotulo(lexema);
                     if(posicao != -1) {
                         geracaoCodigo.LDV(posicao);
+                    }
+                } else {
+                    if(!tabelaSimbolo.pesquisaDeclaracaoFuncaoTabela(lexema)) {
+                        int posicao = tabelaSimbolo.retornaPosicaoRotulo(lexema);
+
+                        if(posicao != -1) {
+                            geracaoCodigo.CALL(posicao);
+                            geracaoCodigo.RetornaValorFuncao();
+                        }
                     }
                 }
                 break;
