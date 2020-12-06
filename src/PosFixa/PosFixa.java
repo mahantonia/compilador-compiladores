@@ -64,9 +64,9 @@ public class PosFixa {
                         if(instrucoesPosFixas.retornaValorPrioridade(getTopoPilha().getSimbolo()) < instrucoesPosFixas.retornaValorPrioridade(token.getSimbolo()) ) {
                             pilha.add(token);
                         } else {
-                            if(instrucoesPosFixas.retornaValorPrioridade(getTopoPilha().getSimbolo()) > instrucoesPosFixas.retornaValorPrioridade(token.getSimbolo())) {
+                            if(instrucoesPosFixas.retornaValorPrioridade(getTopoPilha().getSimbolo()) >= instrucoesPosFixas.retornaValorPrioridade(token.getSimbolo())) {
                                 while (!pilha.isEmpty()) {
-                                    if(instrucoesPosFixas.retornaValorPrioridade(getTopoPilha().getSimbolo()) > instrucoesPosFixas.retornaValorPrioridade(token.getSimbolo())) {
+                                    if(instrucoesPosFixas.retornaValorPrioridade(getTopoPilha().getSimbolo()) >= instrucoesPosFixas.retornaValorPrioridade(token.getSimbolo())) {
                                         expressaoFinalPosFixa.add(getTopoPilha());
                                         removeTopoPilha();
                                     } else {

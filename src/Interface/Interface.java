@@ -1,7 +1,6 @@
 package Interface;
 
 import Arquivo.Arquivo;
-import Lexico.Lexico;
 import Sintatico.Sintatico;
 
 import javax.swing.*;

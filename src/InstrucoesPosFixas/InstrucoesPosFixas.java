@@ -27,8 +27,8 @@ public class InstrucoesPosFixas {
     public void criaTabelaPrioridades() {
         listaPrioridades.put("smenosu", new Operador(6, 1, operadoresInteiro, "sinteiro"));
         listaPrioridades.put( "snao", new Operador(6, 1, operadoresBoolean, "sboolean"));
-        listaPrioridades.put( "smult", new Operador(5, 2, operadoresInteiro, "sinteiro"));
         listaPrioridades.put( "sdiv", new Operador(5, 2, operadoresInteiro, "sinteiro"));
+        listaPrioridades.put( "smult", new Operador(5, 2, operadoresInteiro, "sinteiro"));
         listaPrioridades.put( "smais", new Operador(4, 2, operadoresInteiro, "sinteiro"));
         listaPrioridades.put( "smenos", new Operador(4, 2, operadoresInteiro, "sinteiro"));
         listaPrioridades.put( "smenor", new Operador(3, 2, operadoresInteiro, "sboolean"));

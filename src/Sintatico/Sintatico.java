@@ -134,6 +134,7 @@ public class Sintatico {
             geracaoCodigo.ALLOC(offset, variaveis);
         }
     }
+
     private void analisaVariaveis() throws Exception {
         if(tokenSeparado.getSimbolo().equals("svar")){
             tokenSeparado = getToken();
@@ -179,7 +180,7 @@ public class Sintatico {
                     }
                 } else {
                     /* Erro semantico !!*/
-                    errorSemantico("Erro Semantico - Variavel duplicada ");
+                    semantico.errorSemantico("Erro Semantico - Variavel duplicada ", Integer.parseInt(tokenSeparado.getLinha()));
                 }
             } else {
                 errorSintatico("esperado um identificador");
@@ -272,7 +273,7 @@ public class Sintatico {
                     errorSintatico("esperado ponto e virgula no final");
                 }
             } else {
-                errorSemantico("Erro Semantico - procedimento com o mesmo nome de outro ja declarado no programa");
+                semantico.errorSemantico("Erro Semantico - procedimento com o mesmo nome de outro ja declarado no programa", Integer.parseInt(tokenSeparado.getLinha()));
             }
         } else {
             errorSintatico("esperado um identificador");
@@ -330,7 +331,7 @@ public class Sintatico {
                         if(verificaRetornoFuncao || verificaEncadeamentoSe) {
                             verificaRetornoFuncao = false;
                         } else {
-                            errorSemantico("Erro Semantico - Funcao sem retorno");
+                            semantico.errorSemantico("Erro Semantico - Funcao sem retorno", Integer.parseInt(tokenSeparado.getLinha()));
                         }
                     }
                 } else {
@@ -338,7 +339,7 @@ public class Sintatico {
                 }
             } else {
                 /* Erro Sematico */
-                errorSemantico("Erro Semantico - nao existe ou nao esta visivel o nome da funcao");
+                semantico.errorSemantico("Erro Semantico - nao existe ou nao esta visivel o nome da funcao", Integer.parseInt(tokenSeparado.getLinha()));
             }
         } else {
             errorSintatico("esperado um identificador");
@@ -439,7 +440,7 @@ public class Sintatico {
             }
 
             if(!tipoExpressao.getTipo().getTipoValor().equals(tipoVariavelAtribuicao)) {
-                errorSemantico("Erro Semantico - tipos diferentes");
+                semantico.errorSemantico("Erro Semantico - tipos diferentes", Integer.parseInt(tokenSeparado.getLinha()));
             }
 
             /* Inicio Geracao de codigo */
@@ -482,7 +483,7 @@ public class Sintatico {
                 }
 
                 if(!tipoExpressao.getTipo().getTipoValor().equals(tipoVariavelAtribuicao)) {
-                    errorSemantico("Erro Semantico - tipos diferentes");
+                    semantico.errorSemantico("Erro Semantico - tipos diferentes", Integer.parseInt(tokenSeparado.getLinha()));
                 }
 
                 if(validaRetorno) {
@@ -511,7 +512,7 @@ public class Sintatico {
 
 //                /* Fim Geracao Codigo */
             } else {
-                errorSemantico("Erro Semantico - Variavel ou funcao nao declarados");
+                semantico.errorSemantico("Erro Semantico - Variavel ou funcao nao declarados", Integer.parseInt(tokenSeparado.getLinha()));
             }
         }
     }
@@ -526,7 +527,7 @@ public class Sintatico {
             }
             /*FIM Geracao de Codigo */
         } else {
-            errorSemantico("Erro Semantico - nao existe procedimento declarado no escopo");
+            semantico.errorSemantico("Erro Semantico - nao existe procedimento declarado no escopo", Integer.parseInt(tokenSeparado.getLinha()));
         }
     }
 
@@ -549,7 +550,7 @@ public class Sintatico {
         }
 
         if(!tipoExpressao.getTipo().getTipoValor().equals("sboolean")) {
-            errorSemantico("Erro Semantico - expressao nao retorna booleano");
+            semantico.errorSemantico("Erro Semantico - expressao nao retorna booleano", Integer.parseInt(tokenSeparado.getLinha()));
         } else {
             if(tokenSeparado.getSimbolo().equals("sentao")) {
                 dentroEntao = true;
@@ -659,7 +660,7 @@ public class Sintatico {
                     analisaChamadaFuncao();
                 }
             } else {
-                errorSemantico("Erro Semantico -  nome de variavel fora do escopo ou nao declarada");
+                semantico.errorSemantico("Erro Semantico -  nome de variavel fora do escopo ou nao declarada", Integer.parseInt(tokenSeparado.getLinha()));
             }
         } else {
             if(tokenSeparado.getSimbolo().equals("snumero")) {
@@ -699,7 +700,7 @@ public class Sintatico {
     private void analisaChamadaFuncao() throws Exception {
         if(tokenSeparado.getSimbolo().equals("sidentificador")) {
             if(semantico.getTabelaSimbolo().pesquisaDeclaracaoFuncaoTabela(tokenSeparado.getLexema())) {
-                errorSemantico("Erro Semantico - funcao nao declarada ");
+                semantico.errorSemantico("Erro Semantico - funcao nao declarada ", Integer.parseInt(tokenSeparado.getLinha()));
             }
         } else {
             errorSintatico("esperado um identificador");
@@ -733,7 +734,7 @@ public class Sintatico {
         }
 
         if(!tipoExpressao.getTipo().getTipoValor().equals("sboolean")) {
-            errorSemantico("Erro Semantico - Tipos diferentes (Enquanto)");
+            semantico.errorSemantico("Erro Semantico - Tipos diferentes (Enquanto)", Integer.parseInt(tokenSeparado.getLinha()));
         } else {
             /* Inicia Gera Codigo */
             armazenaValorRotuloSaida = rotulo;
@@ -773,7 +774,7 @@ public class Sintatico {
                     /* Fim Geracao de Codigo */
                     tokenSeparado = getToken();
                 } else {
-                    errorSemantico("Erro Semantico - variavel nao declarada");
+                    semantico.errorSemantico("Erro Semantico - variavel nao declarada", Integer.parseInt(tokenSeparado.getLinha()));
                 }
                 if(tokenSeparado.getSimbolo().equals("sfecha_parenteses")) {
                     tokenSeparado = getToken();
@@ -818,7 +819,7 @@ public class Sintatico {
                         tokenSeparado = getToken();
                     } else {
                         /* Erro semantico */
-                        errorSemantico("Erro semantico - variavel nao declarada no escopo ou fora de alcance q");
+                        semantico.errorSemantico("Erro semantico - variavel nao declarada no escopo ou fora de alcance ", Integer.parseInt(tokenSeparado.getLinha()));
                     }
 
                 }
@@ -838,10 +839,6 @@ public class Sintatico {
 
     private void errorSintatico(String s) throws Exception {
         new ErroSintatico().printaErro(s, Integer.parseInt(tokenSeparado.getLinha()));
-    }
-
-    private void errorSemantico(String conteudo) throws Exception {
-        new ErroSematico().printaErro(conteudo,  Integer.parseInt(tokenSeparado.getLinha()));
     }
 
     private Token getToken() throws Exception {

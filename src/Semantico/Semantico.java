@@ -1,5 +1,6 @@
 package Semantico;
 
+import ErroSemantico.ErroSematico;
 import GeracaoCodigo.GeracaoCodigo;
 import PosFixa.PosFixa;
 import TabelaSimbolo.TabelaSimbolo;
@@ -21,5 +22,9 @@ public class Semantico {
 
     public PosFixa getPosFixa() {
         return posFixa;
+    }
+
+    public void errorSemantico(String conteudo, int linha) throws Exception {
+        new ErroSematico().printaErro(conteudo,  linha);
     }
 }
